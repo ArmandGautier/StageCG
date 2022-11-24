@@ -48,7 +48,7 @@ public class FiveSkills {
 			}
 		}
 		
-		int res = Tools.min(weight[indicePecheur],types[indicePecheur]) + (Tools.min(weight[indiceTireur],types[indiceTireur]) + Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(weight[indiceRevendeur],types[indiceRevendeur])); 
+		int res = 2*Tools.min(weight[indicePecheur],types[indicePecheur]) + (4*Tools.min(weight[indiceTireur],types[indiceTireur]) + 3*Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(weight[indiceRevendeur],types[indiceRevendeur])); 
 		
 		return res;
 	}

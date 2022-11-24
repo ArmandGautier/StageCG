@@ -1,15 +1,17 @@
 package ADD;
 
+import java.util.Objects;
+
 import CoalitionGame.Type;
 
-public class Node {
+public class Node<V> implements Cloneable {
 	
 	private Integer id;
-	private int numVariable = -1;
+	private V idVariable = null;
 	private Type type = null;
 	private int value = -1;
-	private Node rightChild = null;
-	private Node leftChild = null;
+	private Node<?> rightChild = null;
+	private Node<?> leftChild = null;
 	private boolean isLeaf = false;
 	
 	/**
@@ -28,38 +30,48 @@ public class Node {
 	 * @param numVariable
 	 * @param type
 	 */
-	public Node(Integer id, int numVariable, Type type) {
+	public Node(Integer id, V idVariable, Type type) {
 		super();
 		this.id = id;
-		this.numVariable = numVariable;
+		this.idVariable = idVariable;
 		this.type = type;
+	}
+	
+	/**
+	 * @param id
+	 * @param numVariable
+	 */
+	public Node(Integer id, V idVariable) {
+		super();
+		this.id = id;
+		this.idVariable = idVariable;
 	}
 
 	/**
 	 * @return the rightChild
 	 */
-	public Node getRightChild() {
+	public Node<?> getRightChild() {
 		return rightChild;
 	}
 
 	/**
 	 * @param rightChild the rightChild to set
 	 */
-	public void setRightChild(Node rightChild) {
+	public void setRightChild(Node<?> rightChild) {
 		this.rightChild = rightChild;
 	}
 
 	/**
 	 * @return the leftChild
 	 */
-	public Node getLeftChild() {
+	public Node<?> getLeftChild() {
 		return leftChild;
 	}
 
 	/**
 	 * @param leftChild the leftChild to set
 	 */
-	public void setLeftChild(Node leftChild) {
+	public void setLeftChild(Node<?> leftChild) {
 		this.leftChild = leftChild;
 	}
 
@@ -73,8 +85,8 @@ public class Node {
 	/**
 	 * @return the numVariable
 	 */
-	public int getNumVariable() {
-		return numVariable;
+	public V getIdVariable() {
+		return idVariable;
 	}
 
 	/**
@@ -101,7 +113,7 @@ public class Node {
 			return ("Feuille de valeur : " + value + " id : " + id + "\n");
 		}
 		else {
-			return ("Noeud de variable : " + numVariable + "\nSous arbe droit : \n" + this.rightChild.toString()) + "Sous arbre gauche : \n" + this.leftChild.toString() ;
+			return ("Noeud de variable : " + idVariable.toString() + "\n\nSous arbe droit de " + idVariable.toString() + ": \n" + this.rightChild.toString()) + "\nSous arbre gauche de " + idVariable.toString() + ": \n" + this.leftChild.toString() ;
 		}
 	}
 
@@ -113,5 +125,23 @@ public class Node {
 		String res = "(" + leftChild.hashCode() + "," + rightChild.hashCode() + ")";
 		return res.hashCode();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Node n = (Node) obj;
+		if ( this.isLeaf() != n.isLeaf()) {
+			return false;
+		}
+		if ( this.isLeaf()) {
+			return this.getValue() == n.getValue();
+		}
+		return this.getLeftChild().equals(n.getLeftChild()) && this.getRightChild().equals(n.getRightChild());
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
+
 	
 }

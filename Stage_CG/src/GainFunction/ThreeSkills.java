@@ -96,7 +96,7 @@ public class ThreeSkills {
 			}
 		}
 		
-		int res = (Tools.min(weight[indiceTireur],types[indiceTireur]) + Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]);
+		int res = (2*Tools.min(weight[indiceTireur],types[indiceTireur]) + 5*Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]);
 		
 		return res;
 	}

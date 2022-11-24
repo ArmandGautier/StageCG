@@ -25,11 +25,11 @@ public class Test2 {
 
 	public static void main(String[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 		
-		int nbPlayer = 26;
-		int limNbPlayer = 41;
-		int nbGame = 50;
+		int nbPlayer = 2;
+		int limNbPlayer = 3;
+		int nbGame = 1;
 		int nbType = 2;
-		int limNbType = 7;
+		int limNbType = 3;
 		ArrayList<Player> listPlayer = new ArrayList<Player>();
 		ArrayList<Type> listType = new ArrayList<Type>();
 		
@@ -86,7 +86,7 @@ public class Test2 {
 					//CoalitionGame g = GenerationOfCGwithType.createCGwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight);
 					//ADD<Player> addbig = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, false);
 					double time = System.currentTimeMillis();
-					ADD<Player> add = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, true);
+					ADD<Player> add = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, true, false);
 					double constructTime = System.currentTimeMillis()-time;
 					/*
 					add.writeADDinDOT("dot.dot");
@@ -144,7 +144,7 @@ public class Test2 {
 			    
 			    bw2.close();
 			    indiceInfoGame++;
-			    content = i+", "+j+", "+MoytimeAddO/nbGame+", "+MoyConstructTime+", "+MoynbNodeAddO/nbGame+", "+nbEmptyCore+"\n";
+			    content = i+", "+j+", "+MoytimeAddO/nbGame+", "+MoyConstructTime/nbGame+", "+MoynbNodeAddO/nbGame+", "+nbEmptyCore+"\n";
 			    bw.write(content);
 			}
 		}

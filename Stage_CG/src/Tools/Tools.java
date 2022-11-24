@@ -1,16 +1,22 @@
 package Tools;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import ADD.Node;
 import CoalitionGame.Coalition;
 import CoalitionGame.Player;
 import CoalitionGame.Type;
@@ -246,6 +252,7 @@ public class Tools {
 		
 		int i=0;
 		for ( String name : nameOfSkills) {
+			//System.out.println("name : "+name+i);
 			listType.add(new Type(i,name));
 			i++;
 		}
@@ -273,9 +280,10 @@ public class Tools {
 		int[] res = new int[listType.size()];
 		Random random = new Random();
 		for (int i=0; i<listType.size(); i++) {
-			res[i]=random.nextInt(1, nbPlayer/2+1);
+			res[i]=random.nextInt(2, nbPlayer/2+2);
 			//System.out.println("nombre idéal de " + listType.get(i).getName() + " = "+res[i]);
 		}
 		return res;
 	}
+
 }

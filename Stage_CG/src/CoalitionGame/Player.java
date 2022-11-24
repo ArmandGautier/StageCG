@@ -39,7 +39,7 @@ public class Player implements Comparable<Player> {
 
 	@Override
     public String toString() {
-    	return "Joueur "+this.representation;
+    	return "Joueur"+this.representation;
     }
 	
 	@Override

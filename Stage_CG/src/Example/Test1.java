@@ -26,7 +26,7 @@ public class Test1 {
         parameterTypes[2] = int[].class;
         Method m = TwoSkills.class.getMethod("minTireurBatteur", parameterTypes);
 		
-		ADD<Player> add = GenerationOfADDwithType.createADDandPlayer(nbPlayer, l, m, tab, true);
+		ADD<Player> add = GenerationOfADDwithType.createADDandPlayer(nbPlayer, l, m, tab, true, false);
 		add.writeADDinDOT("file.DOT");
 		
 		EmptyCore lp = new EmptyCore();

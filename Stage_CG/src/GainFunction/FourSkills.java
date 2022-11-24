@@ -41,7 +41,7 @@ public class FourSkills {
 			}
 		}
 		
-		int res = (Tools.min(weight[indiceTireur],types[indiceTireur]) + Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(weight[indiceRevendeur],types[indiceRevendeur])); 
+		int res = (2*Tools.min(weight[indiceTireur],types[indiceTireur]) + 5*Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(weight[indiceRevendeur],types[indiceRevendeur])); 
 		
 		return res;
 	}

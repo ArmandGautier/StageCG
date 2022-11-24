@@ -1,6 +1,9 @@
 package ADD;
 
 import java.util.Iterator;
+import java.util.List;
+
+import DAG.DAG;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,9 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ADD<V> {
 	
-	private HashMap<Integer,Node> nodes;
+	private HashMap<Integer,HashMap<Integer,Node>> nodes;
 	private Node root;
 	private ArrayList<V> varOrder;
 	
@@ -19,7 +23,7 @@ public class ADD<V> {
 	 * @param nodes
 	 * @param root
 	 */
-	public ADD(HashMap<Integer, Node> nodes, Node root, ArrayList<V> varOrder) {
+	public ADD(HashMap<Integer,HashMap<Integer,Node>> nodes, Node root, ArrayList<V> varOrder) {
 		super();
 		this.nodes = nodes;
 		this.root = root;
@@ -27,7 +31,11 @@ public class ADD<V> {
 	}
 	
 	public int getNbNodes() {
-		return nodes.size();
+		int res=0;
+		for (Integer key : nodes.keySet()) {
+			res += nodes.get(key).size();
+		}
+		return res;
 	}
 	
 	public Node getRoot() {
@@ -39,7 +47,11 @@ public class ADD<V> {
 	}
 
 	public Iterator<Node> getIteratorOnNodes() {
-		return nodes.values().iterator();
+		List<Node> c = new ArrayList<Node>();
+		for (Integer key : this.nodes.keySet()) {
+			c.addAll(nodes.get(key).values());
+		}
+		return c.iterator();
 	}
 	
 	public void writeADDinDOT(String filename) {
@@ -60,12 +72,21 @@ public class ADD<V> {
 			  Iterator<Node> it = this.getIteratorOnNodes();
 			  
 			  while (it.hasNext()) {
-				  Node node = it.next();
+				  Node<?> node = it.next();
 				  
 				  if ( ! node.isLeaf() ) {
-					  content += node.getId() + " [label=x" + node.getNumVariable() + "_de_type_"+ node.getType().getName() + "];\n";
-					  content += node.getId() + " -> " + node.getRightChild().getId() + " [label="+true+"];\n";
-					  content += node.getId() + " -> " + node.getLeftChild().getId() + " [label="+false+"];\n";
+					  
+					  if (node.getType() == null) {  
+						  content += node.getId() + " [label=" + node.getIdVariable() + "];\n";
+						  content += node.getId() + " -> " + node.getRightChild().getId() + " [label="+true+"];\n";
+						  content += node.getId() + " -> " + node.getLeftChild().getId() + " [label="+false+"];\n";
+					  }
+					  
+					  else {  
+						  content += node.getId() + " [label=x" + node.getIdVariable() + "_de_type_"+ node.getType().getName() + "];\n";
+						  content += node.getId() + " -> " + node.getRightChild().getId() + " [label="+true+"];\n";
+						  content += node.getId() + " -> " + node.getLeftChild().getId() + " [label="+false+"];\n";
+					  }
 				  }
 				  
 				  else {
@@ -80,5 +101,144 @@ public class ADD<V> {
 		
 		catch (IOException e) {e.printStackTrace();}
 	}
+	
+	public DAG createDAG() throws CloneNotSupportedException {
+		
+		HashMap<Integer,Node>  dagNodes = new HashMap<Integer,Node>();
+		Node rootDag = (Node) this.root.clone();
+		fun(dagNodes,rootDag,0,this.getNbNodes()-1);
+		DAG res = new DAG(dagNodes,rootDag,this.varOrder);
+		
+		return res;
+			
+	}
 
+	/**
+	 * @return the nodes
+	 */
+	public HashMap<Integer,HashMap<Integer,Node>> getNodes() {
+		return nodes;
+	}
+
+	private int fun(HashMap<Integer, Node> dagNodes, Node node, int depth, int nbNode) {
+		
+		if (node.isLeaf() && depth<this.varOrder.size()) {
+			Node newNode = new Node(nbNode+1,this.varOrder.get(depth));
+			newNode.setLeftChild(node);
+			newNode.setRightChild(node);
+			nbNode = fun(dagNodes,newNode,depth,nbNode+1);
+			return nbNode;
+		}
+		
+		if ( ! node.isLeaf()) {
+			if ( depth==0 && ! node.getIdVariable().equals(varOrder.get(0))) {
+				Node newNode = new Node(nbNode+1,this.varOrder.get(0));
+				newNode.setLeftChild(node);
+				newNode.setRightChild(node);
+				nbNode = fun(dagNodes,newNode,depth,nbNode+1);
+				return nbNode;
+			}
+		}
+		
+		if (depth < this.varOrder.size()-1 && ! dagNodes.containsKey(node.getId())) {
+		
+			Node leftChild = node.getLeftChild();
+			Node rightChild = node.getRightChild();
+			
+			boolean leftOk = true;
+			boolean rightOk = true;
+			
+			if (leftChild.isLeaf()) {
+				leftOk = false;
+			}
+			else {
+				if (! leftChild.getIdVariable().equals(varOrder.get(depth+1))) {
+					leftOk = false;
+				}
+			}
+			
+			if (rightChild.isLeaf()) {
+				rightOk = false;
+			}
+			else {
+				if (! rightChild.getIdVariable().equals(varOrder.get(depth+1))) {
+					rightOk = false;
+				}
+			}
+			
+			if (! leftOk) {
+				
+				nbNode++;
+				
+				// les deux pas ok
+				
+				if (! rightOk) {
+					
+					if (! rightChild.equals(leftChild)) {
+						Node newNode1 = new Node(nbNode,this.varOrder.get(depth+1));
+						nbNode++;
+						Node newNode2 = new Node(nbNode,this.varOrder.get(depth+1));
+						node.setLeftChild(newNode1);
+						node.setRightChild(newNode2);
+						newNode1.setLeftChild(leftChild);
+						newNode1.setRightChild(leftChild);
+						newNode2.setLeftChild(rightChild);
+						newNode2.setRightChild(rightChild);
+						nbNode = fun(dagNodes,newNode1,depth+1,fun(dagNodes,newNode2,depth+1,nbNode));
+					}
+					else {
+						Node newNode = new Node(nbNode,this.varOrder.get(depth+1));
+						node.setLeftChild(newNode);
+						node.setRightChild(newNode);
+						newNode.setLeftChild(leftChild);
+						newNode.setRightChild(rightChild);
+						nbNode = fun(dagNodes,newNode,depth+1,nbNode);
+					}
+				}
+				
+				// gauche pas ok, droit ok
+				
+				else {
+					Node newNode = new Node(nbNode,this.varOrder.get(depth+1));
+					node.setLeftChild(newNode);
+					newNode.setLeftChild(leftChild);
+					newNode.setRightChild(leftChild);
+					nbNode = fun(dagNodes,rightChild,depth+1,fun(dagNodes,newNode,depth+1,nbNode));
+				}
+			}
+			else {
+				
+				// gauche ok, droit pas ok
+				
+				if (! rightOk) {
+					
+					nbNode++; 
+					
+					Node newNode = new Node(nbNode,this.varOrder.get(depth+1));
+					node.setRightChild(newNode);
+					newNode.setLeftChild(rightChild);
+					newNode.setRightChild(rightChild);
+					nbNode = fun(dagNodes,leftChild,depth+1,fun(dagNodes,newNode,depth+1,nbNode));
+				}
+				
+				// les deux ok
+				
+				else {
+					nbNode = fun(dagNodes,leftChild,depth+1,fun(dagNodes,rightChild,depth+1,nbNode));
+				}
+			}
+			
+			
+			if ( ! dagNodes.containsKey(node.getId()))
+				dagNodes.put(node.getId(),node);
+		}
+		if ( ! dagNodes.containsKey(node.getId()))
+			dagNodes.put(node.getId(),node);
+		if ( ! dagNodes.containsKey(node.getRightChild().getId()))
+			dagNodes.put(node.getRightChild().getId(),node.getRightChild());
+		if ( ! dagNodes.containsKey(node.getLeftChild().getId()))
+			dagNodes.put(node.getLeftChild().getId(),node.getLeftChild());
+		return nbNode;
+	}
+	
 }

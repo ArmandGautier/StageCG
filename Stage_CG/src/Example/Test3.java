@@ -96,10 +96,10 @@ public class Test3 {
 					CoalitionGame g = GenerationOfCGwithType.createCGwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight);
 					time1 = System.currentTimeMillis() - time;
 					time = System.currentTimeMillis();
-					ADD<Player> addbig = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, false);
+					ADD<Player> addbig = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, false, false);
 					time2 = System.currentTimeMillis() - time;
 					time = System.currentTimeMillis();
-					ADD<Player> add = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, true);
+					ADD<Player> add = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, GetMethod.getMethod(j), weight, true, false);
 					time3 = System.currentTimeMillis() - time;
 					
 					time = System.currentTimeMillis();
