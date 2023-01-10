@@ -5,13 +5,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import ADD.ADDV1;
+import ADD.ADDSimple;
 import ADD.GenerateAddSquareGames;
-import DAG.DAG;
+import DAG.DAGSimple;
 import LinearProgram.EmptyCore;
 
 public class TestSquareGames {
 	
+	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws CloneNotSupportedException, IOException {
 		
 		int nbPlayer = 100;
@@ -34,14 +35,14 @@ public class TestSquareGames {
 	    for (int i=5; i<= nbPlayer; i++) {
 		
 			double start1 = System.currentTimeMillis();
-			ADDV1<?> add = GenerateAddSquareGames.generateAddSquareGames(i);
+			ADDSimple add = GenerateAddSquareGames.generateAddSquareGames(i);
 			double creationAddTime = System.currentTimeMillis() - start1;
 			
 			int nbNodeADD = add.getNbNodes();
 			//add.writeADDinDOT("AddSquareGames.dot");
 			
 			double start2 = System.currentTimeMillis();
-			DAG<?> dag = add.createDAG();
+			DAGSimple dag = add.createDAG();
 			double creationDagTime = System.currentTimeMillis() - start2;
 			
 			int nbNodeDAG = dag.getNbNodes();

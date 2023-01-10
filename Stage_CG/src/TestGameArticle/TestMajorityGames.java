@@ -5,13 +5,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import ADD.ADD;
+import ADD.ADDSimple;
 import ADD.GenerateAddMajorityGames;
-import DAG.DAG;
+import DAG.DAGSimple;
 import LinearProgram.EmptyCore;
 
 public class TestMajorityGames {
 	
+	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws CloneNotSupportedException, IOException {
 		
 		int n = 25;
@@ -34,14 +35,14 @@ public class TestMajorityGames {
 	    for (int i=2; i<= n; i++) {
 		
     		double start1 = System.currentTimeMillis();
-    		ADD<?> add = GenerateAddMajorityGames.generateAddMajorityGames(i);
+    		ADDSimple add = GenerateAddMajorityGames.generateAddMajorityGames(i);
     		double creationAddTime = System.currentTimeMillis() - start1;
     		
     		int nbNodeADD = add.getNbNodes();
     		//add.writeADDinDOT("AddMajorityGames.dot");
     		
     		double start2 = System.currentTimeMillis();
-    		DAG<?> dag = add.createDAG();
+    		DAGSimple dag = add.createDAG();
     		double creationDagTime = System.currentTimeMillis() - start2;
     		
     		int nbNodeDAG = dag.getNbNodes();

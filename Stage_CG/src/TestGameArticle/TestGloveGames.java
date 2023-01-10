@@ -5,13 +5,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import ADD.ADD;
+
+import ADD.ADDSimple;
 import ADD.GenerateAddGloveGames;
-import DAG.DAG;
+import DAG.DAGSimple;
 import LinearProgram.EmptyCore;
 
 public class TestGloveGames {
 	
+	// BUGUE
+	
+	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws CloneNotSupportedException, IOException {
 		
 		int nbLeftGlove = 3;
@@ -37,14 +41,14 @@ public class TestGloveGames {
 	    	for (int j=2; j<= nbLeftGlove; j++) {
 		
 				double start1 = System.currentTimeMillis();
-				ADD<?> add = GenerateAddGloveGames.generateAddGloveGames(j,i);
+				ADDSimple add = GenerateAddGloveGames.generateAddGloveGames(j,i);
 				double creationAddTime = System.currentTimeMillis() - start1;
 				
 				int nbNodeADD = add.getNbNodes();
 				add.writeADDinDOT("AddGloveGames"+i+j+".dot");
 				
 				double start2 = System.currentTimeMillis();
-				DAG<?> dag = add.createDAG();
+				DAGSimple dag = add.createDAG();
 				double creationDagTime = System.currentTimeMillis() - start2;
 				
 				int nbNodeDAG = dag.getNbNodes();

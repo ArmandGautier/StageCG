@@ -155,18 +155,18 @@ public class Tools {
 	 * @throws IllegalArgumentException 
 	 * @throws IllegalAccessException 
 	 */
-	public static void createCoalitionOfSize(int size, ArrayList<Player> listPlayer, TreeMap<Coalition,Double> nu, Method method, ArrayList<Type> listType, int[] weight) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static void createCoalitionOfSize(int size, ArrayList<Player> listPlayer, TreeMap<Coalition,Double> nu, Method method, ArrayList<Type> listType, int[] patronIdeal) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		if ( size == 0 ) {
 			TreeSet<Player> temp = new TreeSet<Player>();
-			nu.put(new Coalition(temp), Tools.getValOfCoalition(temp, method,listType,weight));
+			nu.put(new Coalition(temp), Tools.getValOfCoalition(temp, method,listType,patronIdeal));
 		}
 		
 		else if (size == 1) {
 			for (int i=0; i<listPlayer.size(); i++) {
 				TreeSet<Player> temp = new TreeSet<Player>();
 				temp.add(listPlayer.get(i));
-				nu.put(new Coalition(temp), getValOfCoalition(temp,method,listType,weight));
+				nu.put(new Coalition(temp), getValOfCoalition(temp,method,listType,patronIdeal));
 			}
 		}
 		
@@ -175,23 +175,23 @@ public class Tools {
 			for (int i=0; i<listPlayer.size(); i++) {
 				temp.add(listPlayer.get(i));
 			}
-			nu.put(new Coalition(temp), getValOfCoalition(temp,method,listType,weight));
+			nu.put(new Coalition(temp), getValOfCoalition(temp,method,listType,patronIdeal));
 		}
 		
 		else {
 			for (int i=0; i<=listPlayer.size()-size; i++) {
 				TreeSet<Player> temp = new TreeSet<Player>();
 				temp.add(listPlayer.get(i));
-				function(i,size,temp,listPlayer,nu,method,listType,weight);
+				function(i,size,temp,listPlayer,nu,method,listType,patronIdeal);
 			}
 		}
 	}
 
 	// pas opti du tout : il faudrait faire un algo itératif plutot que recursif
 	
-	private static void function(int i, int size, TreeSet<Player> list, ArrayList<Player> listPlayer, TreeMap<Coalition,Double> nu, Method method, ArrayList<Type> listType, int[] weight) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private static void function(int i, int size, TreeSet<Player> list, ArrayList<Player> listPlayer, TreeMap<Coalition,Double> nu, Method method, ArrayList<Type> listType, int[] patronIdeal) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if ( size == list.size() ) {
-			nu.put(new Coalition(list), getValOfCoalition(list,method,listType,weight));
+			nu.put(new Coalition(list), getValOfCoalition(list,method,listType,patronIdeal));
 		}
 		else {
 			for (int j=i+1; j< listPlayer.size(); j++) {
@@ -201,12 +201,12 @@ public class Tools {
 				temp.addAll(list);
 				
 				temp.add(listPlayer.get(j));
-				function(j,size,temp,listPlayer,nu,method,listType,weight);
+				function(j,size,temp,listPlayer,nu,method,listType,patronIdeal);
 			}
 		}
 	}
 	
-	private static Double getValOfCoalition(TreeSet<Player> temp, Method method, ArrayList<Type> listType, int[] weigth) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private static Double getValOfCoalition(TreeSet<Player> temp, Method method, ArrayList<Type> listType, int[] patronIdeal) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Map<Integer,Integer> mapOfType = new HashMap<Integer,Integer>();
 		for ( Player p : temp) {
 			if (mapOfType.containsKey(p.getType().getNum())) {
@@ -222,7 +222,7 @@ public class Tools {
 		for (Integer type : mapOfType.keySet()) {
 			tab[type] = mapOfType.get(type);
 		}
-		int res = (int) method.invoke(null, tab, listType, weigth);
+		int res = (int) method.invoke(null, tab, listType, patronIdeal);
 		return (double) res;
 	}
 	
@@ -265,7 +265,6 @@ public class Tools {
 			int val = random.nextInt(0, listType.size());
 			listPlayer.add(new Player(p,listType.get(val)));
 			listType.get(val).addPlayer();
-			//System.out.println("Type du joueur "+p+" : "+listPlayer.get(p).getType().getName());
 		}
 		
 	}
@@ -283,12 +282,11 @@ public class Tools {
 		return x;
 	}
 
-	public static int[] generateRandomWeight(ArrayList<Type> listType, int nbPlayer) {
+	public static int[] generatePatronIdeal(ArrayList<Type> listType, int nbPlayer) {
 		int[] res = new int[listType.size()];
 		Random random = new Random();
 		for (int i=0; i<listType.size(); i++) {
-			res[i]=random.nextInt(1, nbPlayer/2+2);
-			//System.out.println("nombre idéal de " + listType.get(i).getName() + " = "+res[i]);
+			res[i]=random.nextInt(1, nbPlayer);
 		}
 		return res;
 	}
@@ -299,27 +297,6 @@ public class Tools {
 			res += sol[varOrder.indexOf(o)];
 		}
 		return res;
-	}
-	
-	public static int[] generateRandomWeightBis(ArrayList<String> listType, int nbPlayer) {
-		int[] res = new int[listType.size()];
-		Random random = new Random();
-		for (int i=0; i<listType.size(); i++) {
-			res[i]=random.nextInt(1, nbPlayer/2+2);
-			System.out.println("nombre idéal de " + listType.get(i) + " = "+res[i]);
-		}
-		return res;
-	}
-
-	public static boolean canBeSolved(int[] weight, ArrayList<Type> listType) {
-		for (int i=0; i<listType.size(); i++) {
-			Type t = listType.get(i);
-			int nbG = t.getNumberPlayerOfThisType()/weight[t.getNum()];
-			for (int j=i+1; j<listType.size(); j++) {
-				Type t2 = listType.get(j);
-			}
-		}
-		return true;
 	}
 
 }

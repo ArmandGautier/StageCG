@@ -25,6 +25,8 @@ public class findStableSC {
 	double nbContrainte = 0;
 	boolean solved = false;
 	
+	// PLNE avec les if
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void solve(DAG dag, int nbPlayer, double[] Xi) {
 		
@@ -60,9 +62,8 @@ public class findStableSC {
 			// creation des contraintes
 			
 			cplex.addEq(0, Du[dag.getRoot().getId()]);
-			cplex.addEq(nbPlayer-1, Eug[dag.getRoot().getId()]);
 			
-			this.nbContrainte += 2;
+			this.nbContrainte += 1;
 			
 			IloLinearIntExpr[] expr = new IloLinearIntExpr[nbNodes];
 			
@@ -125,13 +126,7 @@ public class findStableSC {
 			
 			double time3 = System.currentTimeMillis();
 			
-			//System.out.println(cplex.toString());
-			
-			//System.out.println("Gooooooo");
 			solved = cplex.solve();
-			//System.out.println("finito");
-			
-			//System.out.println(cplex.getStatus().toString());
 			
 			double time4 = System.currentTimeMillis();
 			
@@ -188,10 +183,8 @@ public class findStableSC {
 			// creation des contraintes
 			
 			cplex.addEq(0, Du[add.getRoot().getId()]);
-			cplex.addEq(1,Eud[add.getRoot().getId()]);
-			cplex.addEq(nbPlayer-1, Eug[add.getRoot().getId()]);
 			
-			this.nbContrainte += 3;
+			this.nbContrainte += 1;
 			
 			IloLinearIntExpr[] expr = new IloLinearIntExpr[nbNodes];
 			
@@ -261,13 +254,7 @@ public class findStableSC {
 			
 			double time3 = System.currentTimeMillis();
 			
-			//System.out.println(cplex.toString());
-			
-			//System.out.println("Gooooooo");
 			solved = cplex.solve();
-			//System.out.println("finito");
-			
-			//System.out.println(cplex.getStatus().toString());
 			
 			double time4 = System.currentTimeMillis();
 			
@@ -288,6 +275,8 @@ public class findStableSC {
 			exc.printStackTrace();
 		}
 	}
+	
+	// BUGUE : linéarisation des ifs
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void solveV2(DAG dag, int nbPlayer, double[] Xi) {
@@ -334,17 +323,12 @@ public class findStableSC {
 			
 			IloLinearNumExpr objective = cplex.linearNumExpr();
 			for (int i=0; i<nbNodes; i++) {
-				objective.addTerm(5, Vu[i]);
+				objective.addTerm(1,Vu[i]);
 			}
 			cplex.addMaximize(objective);
 			
 			cplex.addEq(0, Du[dag.getRoot().getId()]);
 			cplex.addEq(nbPlayer-1, Eug[dag.getRoot().getId()]);
-			cplex.addEq(1, Eud[11]);
-			cplex.addEq(1, Eud[9]);
-			cplex.addEq(1, Eud[8]);
-			cplex.addEq(1, Eud[7]);
-			cplex.addEq(1, Eud[2]);
 			
 			IloLinearIntExpr[] expr = new IloLinearIntExpr[nbNodes];
 			
@@ -371,13 +355,7 @@ public class findStableSC {
 					
 					cplex.addGe(Eug[node.getId()],Vu[node.getId()]);
 					cplex.addGe(cplex.sum(cplex.prod(Wug[node.getId()],delta),Du[lChild.getId()]),cplex.sum(Xi[i],Du[node.getId()]));
-					/*
-					cplex.add(cplex.ifThen(cplex.eq(0,Eug[node.getId()]), cplex.ge(Du[lChild.getId()],0)));
-					cplex.add(cplex.ifThen(cplex.le(1,Eug[node.getId()]), cplex.eq(Du[lChild.getId()],Du[node.getId()])));
-					
-					cplex.add(cplex.ifThen(cplex.eq(0,Eud[node.getId()]), cplex.ge(Du[rChild.getId()],0)));
-					cplex.add(cplex.ifThen(cplex.eq(1,Eud[node.getId()]), cplex.eq(Du[rChild.getId()],cplex.sum(Xi[i],Du[node.getId()]))));
-					*/
+
 					if (i<nbPlayer-1) {
 						expr[lChild.getId()].addTerm(1,Eug[node.getId()]);
 						expr[rChild.getId()].addTerm(1,Eud[node.getId()]);
@@ -412,12 +390,7 @@ public class findStableSC {
 			
 			System.out.println(cplex.toString());
 			
-			System.out.println("Gooooooo");
 			solved = cplex.solve();
-			System.out.println("finito");
-			System.out.println(cplex.getObjValue());
-			
-			//System.out.println(cplex.getStatus().toString());
 			
 			double time4 = System.currentTimeMillis();
 			
@@ -485,13 +458,11 @@ public class findStableSC {
 			
 			IloLinearNumExpr objective = cplex.linearNumExpr();
 			for (int i=0; i<nbNodes; i++) {
-				objective.addTerm(5, Vu[i]);
+				objective.addTerm(1, Vu[i]);
 			}
 			cplex.addMaximize(objective);
 			
 			cplex.addEq(0, Du[add.getRoot().getId()]);
-			cplex.addEq(1,Eud[add.getRoot().getId()]);
-			cplex.addEq(nbPlayer-1, Eug[add.getRoot().getId()]);
 			
 			IloLinearIntExpr[] expr = new IloLinearIntExpr[nbNodes];
 			
@@ -520,13 +491,7 @@ public class findStableSC {
 					
 					cplex.addGe(Eug[node.getId()],Vu[node.getId()]);
 					cplex.addGe(cplex.sum(cplex.prod(Wug[node.getId()],delta),Du[lChild.getId()]),cplex.sum(Xi[i],Du[node.getId()]));
-					/*
-					cplex.add(cplex.ifThen(cplex.eq(0,Eug[node.getId()]), cplex.ge(Du[lChild.getId()],0)));
-					cplex.add(cplex.ifThen(cplex.le(1,Eug[node.getId()]), cplex.eq(Du[lChild.getId()],Du[node.getId()])));
-					
-					cplex.add(cplex.ifThen(cplex.eq(0,Eud[node.getId()]), cplex.ge(Du[rChild.getId()],0)));
-					cplex.add(cplex.ifThen(cplex.eq(1,Eud[node.getId()]), cplex.eq(Du[rChild.getId()],cplex.sum(Xi[i],Du[node.getId()]))));
-					*/
+	
 					if (i<nbPlayer-1) {
 						expr[lChild.getId()].addTerm(1,Eug[node.getId()]);
 						expr[rChild.getId()].addTerm(1,Eud[node.getId()]);
@@ -564,13 +529,7 @@ public class findStableSC {
 			
 			double time3 = System.currentTimeMillis();
 			
-			//System.out.println(cplex.toString());
-			
-			//System.out.println("Gooooooo");
 			solved = cplex.solve();
-			//System.out.println("finito");
-			
-			//System.out.println(cplex.getStatus().toString());
 			
 			double time4 = System.currentTimeMillis();
 			
@@ -636,6 +595,9 @@ public class findStableSC {
 		return du;
 	}
 
+	/**
+	 * @return
+	 */
 	public double[] getVu() {
 		return vu;
 	}

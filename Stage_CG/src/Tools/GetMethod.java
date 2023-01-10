@@ -11,6 +11,7 @@ import GainFunction.TwoSkills;
 
 public class GetMethod {
 	
+	@SuppressWarnings("rawtypes")
 	public static Method getMethod(int nbType) throws NoSuchMethodException, SecurityException {
         Class[] parameterTypes = new Class[3];
         parameterTypes[0] = int[].class;

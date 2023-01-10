@@ -5,14 +5,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import ADD.ADD;
-import ADD.ADDV1;
+import ADD.ADDSimple;
 import ADD.GenerateAdd1of2Games;
-import DAG.DAG;
+import DAG.DAGSimple;
 import LinearProgram.EmptyCore;
 
 public class Test1of2games {
 	
+	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws CloneNotSupportedException, IOException {
 	
 		int nbType = 50;
@@ -37,14 +37,14 @@ public class Test1of2games {
 	    	System.out.println("nbType = "+i);
 		
 			double start1 = System.currentTimeMillis();
-			ADDV1<?> add = GenerateAdd1of2Games.generateAdd1of2Games(i);
+			ADDSimple add = GenerateAdd1of2Games.generateAdd1of2Games(i);
 			double creationAddTime = System.currentTimeMillis() - start1;
 			
 			int nbNodeADD = add.getNbNodes();
 			//add.writeADDinDOT("Add1of2games_"+i+".dot");
 			
 			double start2 = System.currentTimeMillis();
-			DAG<?> dag = add.createDAG();
+			DAGSimple dag = add.createDAG();
 			double creationDagTime = System.currentTimeMillis() - start2;
 			
 			int nbNodeDAG = dag.getNbNodes();

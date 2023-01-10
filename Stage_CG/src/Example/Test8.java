@@ -23,6 +23,8 @@ import Tools.GetSkill;
 import Tools.Tools;
 
 public class Test8 {
+	
+	// test pour comparer les algos DAG vs ADD pour savoir si le C-Core est vide.
 
 	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, CloneNotSupportedException, IOException {
@@ -68,7 +70,7 @@ public class Test8 {
 			    FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
 			    BufferedWriter bw2 = new BufferedWriter(fw2);
 			    
-			    content = "nbPlayer, nbType, nbAddNode, nbDagNode, COS, timeSCAdd, timeSCDag, ADDSolved, DagSolved, canBeSolved, nbAddVar, nbAddCon, nbDagVar, nbDagCon";
+			    content = "nbPlayer, nbType, nbAddNode, nbDagNode, COS, timeSCAdd, timeSCDag, ADDSolved, DagSolved, nbAddVar, nbAddCon, nbDagVar, nbDagCon";
 			    
 			    int moyNbNodeAdd=0;
 			    int moyNbNodeDag=0;
@@ -86,7 +88,7 @@ public class Test8 {
 				
 					Tools.generatePlayerWithType(i, GetSkill.getSkill(j), listPlayer, listType);
 					
-					int[] weight = Tools.generateRandomWeight(listType,i);
+					int[] weight = Tools.generatePatronIdeal(listType,i);
 					
 					if (k==0) {
 						for (int g=0; g<weight.length; g++) {
@@ -108,7 +110,6 @@ public class Test8 {
 				    boolean isSolved = false;
 				    boolean addSolved = false;
 				    boolean dagSolved = false;
-				    boolean canBeSolved = false;
 					
 					ADD add = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, m, weight, true);
 					
@@ -142,7 +143,6 @@ public class Test8 {
 						moyNbNodeDag+=dag.getNbNodes();
 						addSolved = sCAdd.isSolved();
 						dagSolved = sCDag.isSolved();
-						canBeSolved = true;//Tools.canBeSolved(weight,listType);
 						
 						double[] arcsDroitAdd = sCAdd.getEdgeRight();
 						double[] arcsGaucheAdd = sCAdd.getEdgeLeft();
@@ -239,42 +239,41 @@ public class Test8 {
 							}
 						}
 						
-						if (canBeSolved) {
-							if (dagSolved) {
-								if (addSolved) {
-									nb1++;
-								}
-								else {
-									nb2++;
-								}
+						
+						if (dagSolved) {
+							if (addSolved) {
+								nb1++;
 							}
 							else {
-								if (addSolved) {
-									nb3++;
-								}
-								else {
-									nb4++;
-								}
+								nb2++;
 							}
 						}
 						else {
-							if (dagSolved) {
-								if (addSolved) {
-									nb4++;
-								}
-								else {
-									nb3++;
-								}
+							if (addSolved) {
+								nb3++;
 							}
 							else {
-								if (addSolved) {
-									nb2++;
-								}
-								else {
-									nb1++;
-								}
-							}	
+								nb4++;
+							}
 						}
+					
+						if (dagSolved) {
+							if (addSolved) {
+								nb4++;
+							}
+							else {
+								nb3++;
+							}
+						}
+						else {
+							if (addSolved) {
+								nb2++;
+							}
+							else {
+								nb1++;
+							}
+						}	
+					
 						
 						if ( ! TestCore.isStable(dag, sol)) {
 							System.out.println("pasOkok : notStable");
@@ -292,7 +291,7 @@ public class Test8 {
 						*/
 					}
 					
-					content = i + ", " + j + ", " + add.getNbNodes() + ", " + dag.getNbNodes() + ", " + cos + ", " + timeSCAdd + ", " + timeSCDag + ", " + addSolved + ", " + dagSolved + ", " + canBeSolved; 
+					content = i + ", " + j + ", " + add.getNbNodes() + ", " + dag.getNbNodes() + ", " + cos + ", " + timeSCAdd + ", " + timeSCDag + ", " + addSolved + ", " + dagSolved; 
 					content += ", " + sCAdd.getNbVariable();
 					content += ", " + sCAdd.getNbContrainte();
 					content += ", " + sCDag.getNbVariable();

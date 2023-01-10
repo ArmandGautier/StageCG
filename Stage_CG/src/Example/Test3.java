@@ -102,7 +102,7 @@ public class Test3 {
 				
 					Tools.generatePlayerWithType(i, GetSkill.getSkill(j), listPlayer, listType);
 					
-					int[] weight = Tools.generateRandomWeight(listType,i);
+					int[] weight = Tools.generatePatronIdeal(listType,i);
 					
 					double time1 = 0;
 					double time2 = 0;

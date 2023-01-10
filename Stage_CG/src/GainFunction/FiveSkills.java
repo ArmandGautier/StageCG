@@ -10,7 +10,7 @@ public class FiveSkills {
 	// les traqueurs posent leurs pièges dans la fôret, les tireurs se placents à la sortie de la fôret, 
 	// les batteurs font fuire les bêtes vers les pièges et les tireurs, les revendeurs permettent d'optimiser la vente du gibier
 	// les pêcheurs apportent un petit plus
-	public static int TireurBatteurTrappeurRevendeurPecheur(int[] types, ArrayList<Type> listType, int[] weight) {
+	public static int TireurBatteurTrappeurRevendeurPecheur(int[] types, ArrayList<Type> listType, int[] patronIdeal) {
 		
 		int indiceTireur = 0;
 		int indiceBatteur = 0;
@@ -48,7 +48,7 @@ public class FiveSkills {
 			}
 		}
 		
-		int res = 2*Tools.min(weight[indicePecheur],types[indicePecheur]) + (4*Tools.min(weight[indiceTireur],types[indiceTireur]) + 3*Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(weight[indiceRevendeur],types[indiceRevendeur])); 
+		int res = Tools.min(patronIdeal[indicePecheur],types[indicePecheur]) + (Tools.min(patronIdeal[indiceTireur],types[indiceTireur]) + Tools.min(patronIdeal[indiceTrappeur],types[indiceTrappeur])) * Tools.min(patronIdeal[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(patronIdeal[indiceRevendeur],types[indiceRevendeur])); 
 		
 		return res;
 	}

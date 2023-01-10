@@ -7,7 +7,8 @@ import Tools.Tools;
 
 public class ThreeSkills {
 	
-	public static int TireurBatteurRevendeur(int[] types, ArrayList<Type> listType, int[] weight) {
+	//les batteurs rabattent les bêtes vers les tireurs, les revendeurs maximisent la revente
+	public static int TireurBatteurRevendeur(int[] types, ArrayList<Type> listType, int[] patronIdeal) {
 		
 		int indiceTireur = 0;
 		int indiceBatteur = 0;
@@ -33,12 +34,13 @@ public class ThreeSkills {
 			}
 		}
 		
-		int res = Tools.min(weight[indiceTireur],types[indiceTireur]) * Tools.min(weight[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(weight[indiceRevendeur],types[indiceRevendeur]));
+		int res = Tools.min(patronIdeal[indiceTireur],types[indiceTireur]) * Tools.min(patronIdeal[indiceBatteur],types[indiceBatteur]) * (1+Tools.min(patronIdeal[indiceRevendeur],types[indiceRevendeur]));
 		
 		return res;
 	}
 	
-	public static int TireurPisteurRevendeur(int[] types, ArrayList<Type> listType, int[] weight) {
+	//tireur et pisteur non compatible et revendeur maximisent le gain
+	public static int TireurPisteurRevendeur(int[] types, ArrayList<Type> listType, int[] patronIdeal) {
 		
 		int indiceTireur = 0;
 		int indicePisteur = 0;
@@ -64,13 +66,13 @@ public class ThreeSkills {
 			}
 		}
 		
-		int res = Tools.min(weight[indiceTireur],types[indiceTireur]) * Tools.min(weight[indicePisteur],types[indicePisteur]) * Tools.max(1,Tools.min(weight[indiceRevendeur],types[indiceRevendeur]));
+		int res = Tools.max(Tools.min(patronIdeal[indiceTireur],types[indiceTireur]),Tools.min(patronIdeal[indicePisteur],types[indicePisteur])) * Tools.max(1,Tools.min(patronIdeal[indiceRevendeur],types[indiceRevendeur]));
 		
 		return res;
 	}
 
 	// les traqueurs posent leurs pièges dans la fôret, les tireurs se placents à la sortie de la fôret, les batteurs font fuire les bêtes vers les pièges et les tireurs
-	public static int TireurBatteurTrappeur(int[] types, ArrayList<Type> listType, int[] weight) {
+	public static int TireurBatteurTrappeur(int[] types, ArrayList<Type> listType, int[] patronIdeal) {
 		
 		int indiceTireur = 0;
 		int indiceBatteur = 0;
@@ -96,7 +98,7 @@ public class ThreeSkills {
 			}
 		}
 		
-		int res = (2*Tools.min(weight[indiceTireur],types[indiceTireur]) + 5*Tools.min(weight[indiceTrappeur],types[indiceTrappeur])) * Tools.min(weight[indiceBatteur],types[indiceBatteur]);
+		int res = (Tools.min(patronIdeal[indiceTireur],types[indiceTireur]) + Tools.min(patronIdeal[indiceTrappeur],types[indiceTrappeur])) * Tools.min(patronIdeal[indiceBatteur],types[indiceBatteur]);
 		
 		return res;
 	}

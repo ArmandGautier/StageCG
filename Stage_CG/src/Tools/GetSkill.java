@@ -56,15 +56,6 @@ public class GetSkill {
 		return res;
 	}
 	
-	public static ArrayList<String> getFourSkillsTBPR() {
-		ArrayList<String> res = new ArrayList<String>();
-		res.add("Tireur");
-		res.add("Batteur");
-		res.add("Revendeur");
-		res.add("Pisteur");
-		return res;
-	}
-	
 	public static ArrayList<String> getFiveSkillsTBTRP() {
 		ArrayList<String> res = new ArrayList<String>();
 		res.add("Tireur");

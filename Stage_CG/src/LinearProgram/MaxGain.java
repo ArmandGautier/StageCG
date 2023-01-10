@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import ADD.Node;
-import DAG.DAGV2;
+import DAG.DAG;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
@@ -24,7 +24,7 @@ public class MaxGain {
 	boolean solved = false;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void solve(DAGV2 dag, int nbPlayer) {
+	public void solve(DAG dag, int nbPlayer) {
 		
 		try {
 			
@@ -61,8 +61,6 @@ public class MaxGain {
 			// creation des contraintes
 			
 			cplex.addEq(0, Du[dag.getRoot().getId()]);
-			
-			cplex.addEq(nbPlayer-1, Eug[dag.getRoot().getId()]);
 			
 			IloLinearIntExpr[] expr = new IloLinearIntExpr[nbNodes];
 			
@@ -128,13 +126,7 @@ public class MaxGain {
 			
 			double time3 = System.currentTimeMillis();
 			
-			//System.out.println(cplex.toString());
-			
-			System.out.println("Gooooooo");
 			solved = cplex.solve();
-			System.out.println("finito");
-			
-			//System.out.println(cplex.getStatus().toString());
 			
 			double time4 = System.currentTimeMillis();
 			

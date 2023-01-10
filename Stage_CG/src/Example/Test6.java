@@ -79,7 +79,7 @@ public class Test6 {
 				
 					Tools.generatePlayerWithType(i, GetSkill.getSkill(j), listPlayer, listType);
 					
-					int[] patronIdeal = Tools.generateRandomWeight(listType,i);
+					int[] patronIdeal = Tools.generatePatronIdeal(listType,i);
 					
 					Method m = GetMethod.getMethod(j);
 					
