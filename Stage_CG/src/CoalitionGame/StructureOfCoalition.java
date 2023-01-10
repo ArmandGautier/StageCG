@@ -5,6 +5,9 @@ import java.util.TreeSet;
 
 public class StructureOfCoalition {
 
+	/**
+	 * ensemble de coalition
+	 */
 	TreeSet<Coalition> struct = new TreeSet<Coalition>();
 
 	/**

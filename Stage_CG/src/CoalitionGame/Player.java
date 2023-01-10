@@ -2,13 +2,20 @@ package CoalitionGame;
 
 public class Player implements Comparable<Player> {
 
+	/**
+	 * l'identifiant du joueur
+	 */
 	Integer representation;
+	/**
+	 * le type du joueur
+	 */
 	Type type;
 	
 	/**
 	 * @param representation
 	 */
 	public Player(Integer representation) {
+		super();
 		this.representation = representation;
 		this.type = null;
 	}

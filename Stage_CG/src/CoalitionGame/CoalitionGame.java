@@ -8,7 +8,13 @@ import Tools.Tools;
 
 public class CoalitionGame {
 	
+	/**
+	 * l'ensembe des joueurs
+	 */
 	ArrayList<Player> listPlayer = new ArrayList<Player>();
+	/**
+	 * la fonction caractéristique
+	 */
 	TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
 	
 	/**
@@ -34,9 +40,15 @@ public class CoalitionGame {
 		return nu;
 	}
 	
+	/**
+	 * @return the value of Shapley (calculer selon la définition donc pas du tout opti)
+	 */
 	public ArrayList<Double> computeShapley() {
+		
 		ArrayList<Double> res = new ArrayList<Double>();
+		
 		int nbPermutation = Tools.factorial(this.listPlayer.size());
+		
 		HashSet<ArrayList<Player>> listPermutation = Tools.createPermutation(this.listPlayer);
 		
 		for (int i=0; i<this.listPlayer.size(); i++) {
@@ -49,6 +61,11 @@ public class CoalitionGame {
 		return res;
 	}
 
+	/**
+	 * @param p
+	 * @param permutation
+	 * @return marginal contribution of player p in permutation
+	 */
 	private double marginalContribution(Player p, ArrayList<Player> permutation) {
 		
 		// On créé une nouvelle liste pour pouvoir supprimer des éléments sans impacter la liste "permutation"

@@ -13,7 +13,8 @@ import LinearProgram.FindCore;
 import Tools.Tools;
 
 public class Example1 {
-
+	
+	// Un petit exemple qui créé les coalitions auquels on doit attribuer un gain puis qui créé le CG, regarde si le coeur est vide et calcule la valeur de shapley
 	public static void main(String[] args) {
 		
 		ArrayList<Player> listPlayer = new ArrayList<Player>();
@@ -51,6 +52,7 @@ public class Example1 {
 		
 		ArrayList<Double> shap = game.computeShapley();
 		
+		System.out.println("\n SHAPLEY VALUES\n");
 		for (int i=0; i<shap.size(); i++) {
 			System.out.println("X"+i+" = "+shap.get(i));
 		}

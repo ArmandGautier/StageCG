@@ -2,8 +2,17 @@ package CoalitionGame;
 
 public class Type {
 	
+	/**
+	 * l'identifiant du type
+	 */
 	private int num;
+	/**
+	 * le nom du type
+	 */
 	private String name;
+	/**
+	 * le nombre de joueur de ce type 
+	 */
 	private int numberPlayerOfThisType = 0;
 	
 	/**
@@ -37,6 +46,9 @@ public class Type {
 		return numberPlayerOfThisType;
 	}
 	
+	/**
+	 * 
+	 */
 	public void addPlayer() {
 		this.numberPlayerOfThisType++;
 	}

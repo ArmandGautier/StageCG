@@ -1,22 +1,16 @@
 package Tools;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import ADD.Node;
 import CoalitionGame.Coalition;
 import CoalitionGame.Player;
 import CoalitionGame.Type;
@@ -231,6 +225,12 @@ public class Tools {
 		int res = (int) method.invoke(null, tab, listType, weigth);
 		return (double) res;
 	}
+	
+	public static double min(double x, double y) {
+		if ( x<y )
+			return x;
+		return y;
+	}
 
 	public static int min(int x, int y) {
 		if ( x<y )
@@ -275,15 +275,51 @@ public class Tools {
 			return y;
 		return x;
 	}
+	
+	public static double abs(double x) {
+		if ( x < 0) {
+			return - x;
+		}
+		return x;
+	}
 
 	public static int[] generateRandomWeight(ArrayList<Type> listType, int nbPlayer) {
 		int[] res = new int[listType.size()];
 		Random random = new Random();
 		for (int i=0; i<listType.size(); i++) {
-			res[i]=random.nextInt(2, nbPlayer/2+2);
+			res[i]=random.nextInt(1, nbPlayer/2+2);
 			//System.out.println("nombre idéal de " + listType.get(i).getName() + " = "+res[i]);
 		}
 		return res;
+	}
+
+	public static double sum(double[] sol, ArrayList<Player> listPlayer, ArrayList<Player> varOrder) {
+		double res = 0;
+		for (Player o : listPlayer) {
+			res += sol[varOrder.indexOf(o)];
+		}
+		return res;
+	}
+	
+	public static int[] generateRandomWeightBis(ArrayList<String> listType, int nbPlayer) {
+		int[] res = new int[listType.size()];
+		Random random = new Random();
+		for (int i=0; i<listType.size(); i++) {
+			res[i]=random.nextInt(1, nbPlayer/2+2);
+			System.out.println("nombre idéal de " + listType.get(i) + " = "+res[i]);
+		}
+		return res;
+	}
+
+	public static boolean canBeSolved(int[] weight, ArrayList<Type> listType) {
+		for (int i=0; i<listType.size(); i++) {
+			Type t = listType.get(i);
+			int nbG = t.getNumberPlayerOfThisType()/weight[t.getNum()];
+			for (int j=i+1; j<listType.size(); j++) {
+				Type t2 = listType.get(j);
+			}
+		}
+		return true;
 	}
 
 }

@@ -2,14 +2,13 @@ package LinearProgram;
 
 import java.util.Iterator;
 
-import ADD.ADD;
 import ADD.Node;
-import CoalitionGame.Coalition;
-import CoalitionGame.StructureOfCoalition;
 import DAG.DAG;
+import DAG.DAGSimple;
 import ilog.concert.*;
 import ilog.cplex.*;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class EmptyCore {
 	
 	double constructionTime = 0;
@@ -18,96 +17,7 @@ public class EmptyCore {
 	double[] sol;
 	double cos = 0;
 	
-	@SuppressWarnings("rawtypes")
-	public void solve(ADD<?> add, int nbPlayer) {
-		
-		try {
-			
-			IloCplex cplex = new IloCplex();
-			cplex.setOut(null);
-			cplex.setParam(IloCplex.Param.ClockType,1);
-			
-			double time1 = System.currentTimeMillis();
-			
-			// creation des variables
-			
-			IloNumVar[] Du = new IloNumVar[add.getNbNodes()];
-			
-			for (int i=0; i<add.getNbNodes(); i++) {
-				Du[i] = cplex.numVar(0, Double.MAX_VALUE, "D"+i);
-			}
-			
-			IloNumVar[] Xi = new IloNumVar[nbPlayer];
-			
-			for (int i=0; i<nbPlayer; i++) {
-				Xi[i] = cplex.numVar(0, Double.MAX_VALUE, "X"+i);
-			}
-			
-			// creation des contraintes
-			
-			cplex.addEq(0, Du[add.getRoot().getId()]);
-			
-			Iterator<Node> it = add.getIteratorOnNodes();
-			
-			while (it.hasNext()) {
-				Node<?> node = it.next();
-				if (node.isLeaf()) {
-					cplex.addGe(Du[node.getId()],node.getValue());
-				}
-				else {
-					Node<?> rChild = node.getRightChild();
-					Node<?> lChild = node.getLeftChild();
-					IloLinearNumExpr expr = cplex.linearNumExpr();
-					expr.addTerm(1,Du[node.getId()]);
-					expr.addTerm(1,Xi[add.getVarOrder().indexOf(node.getIdVariable())]);
-					cplex.addGe(expr, Du[rChild.getId()]);
-					cplex.addGe(Du[node.getId()], Du[lChild.getId()]);
-				}
-			}
-			
-			cplex.addMinimize(cplex.sum(Xi));
-			
-			double time2 = System.currentTimeMillis();
-			
-			constructionTime = time2-time1;
-			
-			double time3 = System.currentTimeMillis();
-			
-			solved = cplex.solve();
-			
-			double time4 = System.currentTimeMillis();
-			
-			solvingTime = time4-time3;
-			
-			if (solved) {
-				
-				double gainN = 0;
-				Node<?> node = add.getRoot();
-				
-				while (! node.isLeaf()) {
-					node = node.getRightChild();
-				}
-				
-				gainN = node.getValue();
-				
-				sol = cplex.getValues(Xi);
-				double sum = 0;
-				for ( int i=0; i<sol.length; i++) {
-					sum += sol[i];
-				}
-		
-				cos = sum - gainN;
-			
-			}
-			
-			cplex.close();
-		}
-		catch (IloException exc) {
-			exc.printStackTrace();
-		}
-	}
-	
-	public void solve(DAG<?> dag, int nbPlayer) {
+	public void solve(DAGSimple dag, int nbPlayer) {
 		
 		try {
 			
@@ -135,7 +45,7 @@ public class EmptyCore {
 			
 			cplex.addEq(0, Du[dag.getRoot().getId()]);
 			
-			Iterator<Node<?>> it = dag.getIteratorOnNodes();
+			Iterator<Node> it = dag.getIteratorOnNodes();
 			
 			while (it.hasNext()) {
 				Node<?> node = it.next();
@@ -170,7 +80,7 @@ public class EmptyCore {
 			if (solved) {
 				
 				double gainN = 0;
-				Node<?> node = dag.getRoot();
+				Node node = dag.getRoot();
 				
 				while (! node.isLeaf()) {
 					node = node.getRightChild();
@@ -195,7 +105,7 @@ public class EmptyCore {
 		}
 	}
 	
-	public void solve(DAG<?> dag, int nbPlayer, StructureOfCoalition sC) {
+	public void solve(DAG dag, int nbPlayer) {
 		
 		try {
 			
@@ -223,16 +133,16 @@ public class EmptyCore {
 			
 			cplex.addEq(0, Du[dag.getRoot().getId()]);
 			
-			Iterator<Node<?>> it = dag.getIteratorOnNodes();
+			Iterator<Node> it = dag.getIteratorOnNodes();
 			
 			while (it.hasNext()) {
-				Node<?> node = it.next();
+				Node node = it.next();
 				if (node.isLeaf()) {
 					cplex.addGe(Du[node.getId()],node.getValue());
 				}
 				else {
-					Node<?> rChild = node.getRightChild();
-					Node<?> lChild = node.getLeftChild();
+					Node rChild = node.getRightChild();
+					Node lChild = node.getLeftChild();
 					IloLinearNumExpr expr = cplex.linearNumExpr();
 					expr.addTerm(1,Du[node.getId()]);
 					expr.addTerm(1,Xi[dag.getVarOrder().indexOf(node.getIdVariable())]);
@@ -257,19 +167,14 @@ public class EmptyCore {
 			
 			if (solved) {
 				
-				double gainSC = 0;
-				Node<?> node = dag.getRoot();
+				double gainN = 0;
+				Node node = dag.getRoot();
 				
-				
-				for (Coalition c : sC.getStruct()) {
-					while (! node.isLeaf()) {
-						if ( c.getListPlayer().contains(node.getIdVariable()))
-							node = node.getRightChild();
-						else 
-							node = node.getLeftChild();
-					}				
-					gainSC += node.getValue();
+				while (! node.isLeaf()) {
+					node = node.getRightChild();
 				}
+				
+				gainN = node.getValue();
 				
 				sol = cplex.getValues(Xi);
 				double sum = 0;
@@ -277,7 +182,7 @@ public class EmptyCore {
 					sum += sol[i];
 				}
 		
-				cos = sum - gainSC;
+				cos = sum - gainN;
 			
 			}
 			
@@ -323,6 +228,9 @@ public class EmptyCore {
 		return cos;
 	}	
 	
+	/**
+	 * 
+	 */
 	public void print_results() {
 		if (cos==0) {
 			System.out.println("Dans le pay-off solution : ");
@@ -331,7 +239,7 @@ public class EmptyCore {
 			}
 		}
 		else {
-			System.out.println("Le coeur est vide, le COS =" + cos);
+			System.out.println("Le coeur est vide, le COS = " + cos);
 		}
 	}
 	

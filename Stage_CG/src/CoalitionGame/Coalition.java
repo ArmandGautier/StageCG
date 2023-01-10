@@ -6,6 +6,9 @@ import java.util.TreeSet;
 
 public class Coalition implements Comparable<Coalition> {
 	
+	/**
+	 * ensemble des membres de la coalition
+	 */
 	TreeSet<Player> listPlayer = new TreeSet<Player>();
 	
 	/**
@@ -80,11 +83,11 @@ public class Coalition implements Comparable<Coalition> {
 	
 	@Override
 	public int hashCode() {
-		int res = 0;
+		String res = "";
 		for ( Player p : this.listPlayer) {
-			res += p.hashCode();
+			res += " " + p.hashCode() + " ";
 		}
-		return res;
+		return res.hashCode();
 	}
 	
 }

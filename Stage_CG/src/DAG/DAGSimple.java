@@ -10,10 +10,20 @@ import java.util.Iterator;
 
 import ADD.Node;
 
-public class DAG<V> {
+@SuppressWarnings("rawtypes")
+public class DAGSimple<V> {
 	
-	HashMap<Integer,Node<?>>  listNodes = new HashMap<Integer,Node<?>> ();
-	Node<?> root;
+	/**
+	 * représentation du DAG
+	 */
+	HashMap<Integer,Node>  listNodes = new HashMap<Integer,Node> ();
+	/**
+	 * racine du DAG
+	 */
+	Node root;
+	/**
+	 * ordre des variables dans le DAG
+	 */
 	private ArrayList<V> varOrder;
 
 	/**
@@ -21,9 +31,9 @@ public class DAG<V> {
 	 * @param root
 	 * @param varOrder
 	 */
-	public DAG(HashMap<Integer, Node<?>> copyNodes, Node<?> root, ArrayList<V> varOrder) {
+	public DAGSimple(HashMap<Integer, Node> Nodes, Node<?> root, ArrayList<V> varOrder) {
 		super();
-		this.listNodes = copyNodes;
+		this.listNodes = Nodes;
 		this.root = root;
 		this.varOrder = varOrder;
 	}
@@ -31,7 +41,7 @@ public class DAG<V> {
 	/**
 	 * @return the listNodes
 	 */
-	public HashMap<Integer,Node<?>>  getListNodes() {
+	public HashMap<Integer,Node>  getListNodes() {
 		return listNodes;
 	}
 
@@ -42,18 +52,30 @@ public class DAG<V> {
 		return root;
 	}
 	
-	public Iterator<Node<?>> getIteratorOnNodes() {
+	/**
+	 * @return an iterator on nodes of the DAG
+	 */
+	public Iterator<Node> getIteratorOnNodes() {
 		return listNodes.values().iterator();
 	}
 
+	/**
+	 * @return order of variable of the DAG
+	 */
 	public ArrayList<V> getVarOrder() {
 		return varOrder;
 	}
 
+	/**
+	 * @return the number of nodes of the DAG
+	 */
 	public int getNbNodes() {
 		return listNodes.size();
 	}
 
+	/**
+	 * @param filename
+	 */
 	public void writeDAGinDOT(String filename) {
 		
 		try {
@@ -70,10 +92,10 @@ public class DAG<V> {
 			  String content;
 			  content = "digraph G {\n";
 			  
-			  Iterator<Node<?>> it = this.getIteratorOnNodes();
+			  Iterator<Node> it = this.getIteratorOnNodes();
 			  
 			  while (it.hasNext()) {
-				  Node<?> node = it.next();
+				  Node node = it.next();
 				  
 				  if ( ! node.isLeaf() ) {
 					  
