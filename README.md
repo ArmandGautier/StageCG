@@ -3,11 +3,15 @@
 Le code présent dans ce dépôt github a pour objectif de comparer des méthodes permettant de trouver le coeur d'un jeu de coalition, dans ce cadre on s'est intéressé ici aux 
 travaux ménés dans un papier trouvable à cette adresse : https://www.researchgate.net/publication/221455616_Representation_of_coalitional_games_with_algebraic_decision_diagrams.
 
+Un résumé du travail et des notions nécessaires est disponible sur ce lien : AJOUTER LIEN SLIDES.
+
 Dans tous le code, la notion de type ou compétence est fondamentale, tout le code a été dévéloppé dans un contexte où nos joueurs possèdent un type.
+Pour écrire et résoudre les différents algorithmes nous avons utilisé CPLEX, AJOUTER LIEN CPLEX.
 
 Nous avons implémentés :
 - Une classe représentant les jeux de coalitions.
 - Une classe représentant un ADD (algebric decision diagramm).
+- Une classe représentant un DAG.
 - Des fonctions calculant le gain d'une coalition.
 - Deux programmes linéaire permettant de savoir si le coeur d'un jeu de coalition est vide. L'un pour la représentation classique d'un CG (coalition game) par sa fonction caractéristique et l'autre pour sa représentation en ADD présentée dans le papier précedemment mentionné.
 - Un algo de PLNE permettant de savoir si il existe une structure de coalition stable.
@@ -24,7 +28,9 @@ CoalitionGame game = new CoalitionGame(listPlayer,nu);
 
 Pour ce faire on a besoin des deux attributs listPlayer et nu (nom de la fonction caractéristique).
 
-Pour créer listPlayer, une liste de nbPlayer joueurs :
+### *listPlayer*
+
+Pour créer *listPlayer*, une liste de nbPlayer joueurs :
 
 ```
 ArrayList<Player> listPlayer = new ArrayList<Player>();
@@ -36,7 +42,7 @@ for (int i=0; i<nbPlayer; i++) {
 
 Pour créer nu deux options :
 
-### Option1 
+### *nu* Option1 
 On peut, sur de petit exemple, rentré à la main le gain des coalitions. On doit d'abord créer l'ensemble des coalitions puis une boucle sur celles-ci nous permet de leur donner chacune un gain.
 ```		
 TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
@@ -46,14 +52,14 @@ for (int i=0; i<=nbPlayer; i++) {
 }
 Scanner scan = new Scanner(System.in);
 for (Coalition c : listCoalition) {
-			System.out.println(c.toString());
+      System.out.println(c.toString());
       System.out.println("What is the gain for this coalition ? Please enter a number: ");
-		  double number = scan.nextInt();
-			nu.put(c,number);
+      double number = scan.nextInt();
+      nu.put(c,number);
 }
 scan.close();
 ```
-### Option2
+### *nu* Option2
 On peut aussi créer une *Méthode* qui calculera le gain d'une coalition à sa création.
 ```
 TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
@@ -65,8 +71,8 @@ for (int p=0; p<=listPlayer.size(); p++) {
 Ici on procède un peu différement, on ajoute, pour chaque taille de coalition possible directement les coalitions créées à *nu*.
 
 De nouveaux paramètres sont également nécessaire :
-####
-Le paramètres *patronIdeal* nous a servi ici a évité des jeux dont le coeur n'est jamais vide. Son but est de décrire une _équipe_ _type_. 
+#### *patronIdeal*
+Le paramètre *patronIdeal* nous a servi ici a évité des jeux dont le coeur n'est jamais vide. Son but est de décrire une _équipe_ _type_. 
 ```
 int[] patronIdeal = new int[3];
 patronIdeal[0] = 2 // Au sein d'une coalition, il ne sert à rien d'avoir plus de deux joueur du type 0
@@ -74,19 +80,8 @@ patronIdeal[1] = 3 // Au sein d'une coalition, il ne sert à rien d'avoir plus d
 patronIdeal[2] = 1 // Au sein d'une coalition, il ne sert à rien d'avoir plus d'un joueur du type 2
 ```
 On peut passer outre ce paramètres en mettant comme nombre idéal le nombre de joueur pour chaque type.
-####
-Le paramètre *method* renvoi à une fonction qui calculera le gain d'une coalition en fonction de ses membres, de leur type et du patronIdeal.
-```
-// spécification d'un méthode
-public static int method(int[] membresParType, ArrayList<Type> listType, int[] patronIdeal) {
-    nbMembreDeTypei= membreParType[i] // pour retrouver le nombre de joueur de type i au sein de la coalition
-    ...
-    return gain
-}
-```
-_ATTENTION_ : la liste des types n'est pas forcément trié par leur numéro.
-####
-Enfin le paramètres listType est une liste des types possibles pour nos joueurs, un type est défini par un numéro et un nom.
+#### *listType*
+Le paramètre *listType* est une liste des types possibles pour nos joueurs, un type est défini par un numéro et un nom.
 ```
 // création des types à partir d'une liste de compétences
 
@@ -101,10 +96,21 @@ for ( String name : nameOfSkills) {
     i++;
 }
 ```
+#### *method*
+Le paramètre *method* renvoi à une fonction qui calculera le gain d'une coalition en fonction de ses membres, de leur type et du patronIdeal.
+```
+// spécification d'une méthode
+public static int method(int[] membresParType, ArrayList<Type> listType, int[] patronIdeal) {
+    nbMembreDeTypei= membreParType[i] // pour retrouver le nombre de joueur de type i au sein de la coalition
+    ...
+    return gain
+}
+```
+_ATTENTION_ : la liste des types n'est pas forcément trié par leur numéro.
 
 Il est possible de réutiliser des *méthodes* déjà existante (dans le Package *GainFunction*). Mais elle ne marcheront que pour les types pour lesquelles elles ont été créées.
 
-Voici comment les utiliser pour i joueur et j types (il en existe pour de 2 à 6 types)
+Voici comment les utiliser pour i joueurs et j types (il en existe pour de 2 à 6 types)
 ```
 ArrayList<Player> listPlayer = new ArrayList<Player>();
 ArrayList<Type> listType = new ArrayList<Type>();
@@ -127,3 +133,76 @@ Method method = *nomClasse*.getMethod("*nomMéthode*",parameterTypes);
 CoalitionGame g = GenerationOfCGwithType.createCGwithPlayer(listType, listPlayer, method, patronIdeal);
 ```
 où *nomClasse* désigne la classe dans laquelle vous définissez la méthode et *nomMéthode* son nom.
+
+## Instancier un ADD qui représentera un CG
+
+```
+ADD<Player> add = GenerationOfADDwithType.createADDwithPlayer(listType, listPlayer, method, patronIdeal, ordered)
+```
+
+où *listType*, *listPlayer*, *method* et *patronIdeal* sont les paramètres comme décrit précedemment et *ordered* est un booléen qui dira si on veut trier les variables dans notre ADD ou pas.
+
+Si *ordered* == true : on trie les joueurs par types et les types du plus nombreux au moins nombreux.
+Sinon, l'ordre des joueurs est celui de *listPlayer*
+
+Exemple :   
+- Deux joueurs de type 0 : j0 et j3  
+- Trois joueurs de type 1 : j1, j2 et j4  
+
+Trie obtenu avec ordered = true :   
+- Joueurs : j1, j2, j4, j0, j3  
+- Type : type 1 , type 0  
+
+On propose aussi un autre ordre dans lequel les joueurs sont triés par type et les types du moins nombreux au plus nombreux.
+
+_ATTENTION_ pour que les ordres soient bon, il faut impérativement mettre à jour l'attribut *numberPlayerOfThisType* de la classe Type. On peut faire :
+```
+for (Player p : listPlayer) {
+    listType.get(p.getType().getNum()).addPlayer(); 
+}
+```
+En effet à ce moment les types sont encore triés dans leur ordre de création, donc par leur numéro, ce qui ne sera plus le cas après la création de l'ADD si on utilise un ordre.
+
+## Créer le DAG à partir de l'ADD
+
+Pour créer le DAG correspondant à un ADD :
+```
+DAG<Player> dag = add.createDAG();
+```
+
+## Utiliser les programmes linéaires sur nos CG/DAG
+
+Finalement une fois notre DAG ou notre CG instancier on peut lancer la résolution des programmes linéaires.
+
+### PL sur nu
+
+Pour savoir si le coeur d'un CG est vide : 
+```
+FindCore lpCg = new FindCore(game); \\ où game est une instance de la classe CoalitionGame
+lpCg.linearProgramforCG(new StructureOfCoalition(new Coalition(listPlayer)));
+```
+Le coeur n'est pas vide si :
+```
+lpCg.isSolved() == true;
+```
+On peut alors afficher un vecteur de pay-off qui appartient au coeur en faisant :
+```
+lpCg.print_results();
+```
+
+### PL sur DAG
+
+Pour savoir si le coeur d'un CG représenté par un DAG est vide : 
+```
+EmptyCore lpDAG = new EmptyCore();
+lpDAG.solve(dag,i); \\ i est le nombre de joueurs jouant dans le jeux
+```
+Le coeur est vide si le COS (cost of stability) n'est pas nul, le COS représente ce qu'on devrait rajouter au gain de la grande coalition pour que le coeur ne soit pas vide:
+```
+lpDAG.getCos() > 0.00001 \\ il arrive que le PL renvoit une valeur extrêmement petite au lieu de 0 c'est pour ça qu'on ne fait pas > 0 directement.
+```
+Si le coeur n'est pas vide on peut alors afficher un vecteur de pay-off qui appartient au coeur en faisant :
+```
+lpDAG.print_results();
+```
+## Algo de PLNE pour le C-core
