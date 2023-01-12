@@ -252,7 +252,6 @@ public class Tools {
 		
 		int i=0;
 		for ( String name : nameOfSkills) {
-			//System.out.println("name : "+name+i);
 			listType.add(new Type(i,name));
 			i++;
 		}

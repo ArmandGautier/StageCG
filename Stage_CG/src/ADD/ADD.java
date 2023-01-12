@@ -115,7 +115,7 @@ public class ADD<V> {
 					  }
 					  
 					  else {  
-						  content += node.getId() + " [label=x" + node.getIdVariable() + "_de_type_"+ node.getType().getName() + "];\n";
+						  content += node.getId() + " [label=x" + node.getIdVariable() + "_de_type_"+ node.getType().getName() +"];\n";
 						  content += node.getId() + " -> " + node.getRightChild().getId() + " [label="+true+"];\n";
 						  content += node.getId() + " -> " + node.getLeftChild().getId() + " [label="+false+"];\n";
 					  }

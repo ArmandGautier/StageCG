@@ -150,7 +150,7 @@ public class GenerationOfADDwithType {
 		else
 			racine = creation(listPlayer,listType,0,types,nodesFinal,method,patronIdeal,l);
 		
-		ADD add = new ADD(nodesFinal,racine,listPlayer);
+		ADD add = new ADD(nodesFinal,racine,(ArrayList) listPlayer.clone());
 		
 		return add;
 	}
@@ -217,7 +217,7 @@ public class GenerationOfADDwithType {
 		else
 			racine = creation(listPlayer,listType,0,types,nodesFinal,method,patronIdeal,l);
 		
-		ADD add = new ADD(nodesFinal,racine,listPlayer);
+		ADD add = new ADD(nodesFinal,racine,(ArrayList) listPlayer.clone());
 		
 		return add;
 	}
@@ -338,6 +338,12 @@ public class GenerationOfADDwithType {
 		// cas où le noeud sera inutile
 		
 		if (rightChild.equals(leftChild)) {
+			if (rightChild.getId() != leftChild.getId()) {
+				System.out.println();
+				System.out.println(rightChild.getId());
+				System.out.println(leftChild.getId());
+				System.out.println();
+			}
 			return leftChild;
 		}
 		

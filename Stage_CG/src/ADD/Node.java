@@ -173,7 +173,7 @@ public class Node<V> implements Cloneable {
 		if (this.isLeaf()) {
 			return this.value;
 		}
-		String res = "(" + leftChild.getHash() + "," + rightChild.getHash() + ")";
+		String res = "(" + leftChild.getHash() + "," + rightChild.getHash() + ")" + this.idVariable.toString();
 		return res.hashCode();
 	}
 
@@ -186,7 +186,7 @@ public class Node<V> implements Cloneable {
 		if ( this.isLeaf()) {
 			return this.getValue() == n.getValue();
 		}
-		return this.getLeftChild().getHash()==n.getLeftChild().getHash() && this.getRightChild().getHash()==n.getRightChild().getHash();
+		return this.getLeftChild().getHash()==n.getLeftChild().getHash() && this.getRightChild().getHash()==n.getRightChild().getHash() && this.getIdVariable().equals(n.getIdVariable());
 	}
 
 	@Override
