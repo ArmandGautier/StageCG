@@ -6,7 +6,7 @@ travaux ménés dans un papier trouvable à cette adresse : https://www.research
 Un résumé du travail et des notions nécessaires est disponible sur ce lien : AJOUTER LIEN SLIDES.
 
 Dans tous le code, la notion de type ou compétence est fondamentale, tout le code a été dévéloppé dans un contexte où nos joueurs possèdent un type.
-Pour écrire et résoudre les différents algorithmes nous avons utilisé CPLEX, AJOUTER LIEN CPLEX.
+Pour écrire et résoudre les différents algorithmes nous avons utilisé CPLEX, https://www.ibm.com/fr-fr/analytics/cplex-optimizer.
 
 Nous avons implémentés :
 - Une classe représentant les jeux de coalitions.
@@ -38,6 +38,12 @@ int nbPlayer = 3;
 for (int i=0; i<nbPlayer; i++) {  
    listPlayer.add(new Player(i));  
 }  
+```
+Pour des joueurs qui possèdent un type :
+```
+ArrayList<Type> listType = ...; // voir ci dessous pour la création de listType
+ArrayList<Player> listPlayer = new ArrayList<Player>();
+Tools.generateListPlayer(nbPlayer, listPlayer, listType); // on génére nbPlayer joueurs qui auront un des types de listType
 ```
 
 Pour créer nu deux options :
@@ -78,6 +84,8 @@ int[] patronIdeal = new int[3];
 patronIdeal[0] = 2 // Au sein d'une coalition, il ne sert à rien d'avoir plus de deux joueur du type 0
 patronIdeal[1] = 3 // Au sein d'une coalition, il ne sert à rien d'avoir plus de trois joueur du type 1
 patronIdeal[2] = 1 // Au sein d'une coalition, il ne sert à rien d'avoir plus d'un joueur du type 2
+\\ pour le générer aléatoirement
+int[] patronIdeal = Tools.generatePatronIdeal(listType,nbPlayer); \\ renvoi pour chaque type une valeur entre 1 et nbPlayer
 ```
 On peut passer outre ce paramètres en mettant comme nombre idéal le nombre de joueur pour chaque type.
 #### *listType*
@@ -90,11 +98,7 @@ ArrayList<String> nameOfSkills = new ArrayList<String>();
 nameOfSkills.add("Tireur");
 nameOfSkills.add("Batteur");
 
-int i=0;
-for ( String name : nameOfSkills) {
-    listType.add(new Type(i,name));
-    i++;
-}
+Tools.generateListType(nameOfSkills, listType);
 ```
 #### *method*
 Le paramètre *method* renvoi à une fonction qui calculera le gain d'une coalition en fonction de ses membres, de leur type et du patronIdeal.
