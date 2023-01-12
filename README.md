@@ -206,3 +206,22 @@ Si le coeur n'est pas vide on peut alors afficher un vecteur de pay-off qui appa
 lpDAG.print_results();
 ```
 ## Algo de PLNE pour le C-core
+On peut également lancer un algo de PLNE qui nous dira si le C-coeur est vide, on peut le faire aussi bien sur l'ADD que sur le DAG et on a besoin d'avoir lancé dans un premier temps le programme linéaire pour savoire si le coeur est vide.
+```
+findStableSC sCAdd = new findStableSC();
+findStableSC sCDag = new findStableSC();
+sCAdd.solve(add, i, sol); // sol est un vecteur de pay-off coalitionnelement rationnelle calculé par le PL précédent
+sCDag.solve(dag, i, sol); // sol est un vecteur de pay-off coalitionnelement rationnelle calculé par le PL précédent
+```
+Ce programme de PLNE peut être très long à trouver une solution, nous avons donc choisi d'imposer un temps max d'éxécution à CPLEX de 8 minutes. Ce paramètres peut être changé dans le fichier *findStableSC* du package *LinearProgram* au début des fonctions *solve*.
+```
+cplex.setParam(IloCplex.Param.TimeLimit, time); \\ où time est le temps d'éxécution maximal autorisé
+```
+
+Une fois le programme terminé, si il existe une solution :
+```
+if (sCAdd.isSolved());
+```
+On peut reconstruire les coalitions formant notre structure de coalition grâce aux variables *Eud* et *Eug*.
+Vous trouverez un exemple dans le fichier *Test8* du package *Example*
+
