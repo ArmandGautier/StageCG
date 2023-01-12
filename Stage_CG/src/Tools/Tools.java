@@ -246,15 +246,16 @@ public class Tools {
 		return res;
 	}
 	
-	public static void generatePlayerWithType(int nbPlayer, ArrayList<String> nameOfSkills, ArrayList<Player> listPlayer, ArrayList<Type> listType) {
-		
+	public static void generateListType(ArrayList<String> nameOfSkills, ArrayList<Type> listType) {
 		// on crée la liste des Types, une compétence => un type
-		
 		int i=0;
 		for ( String name : nameOfSkills) {
 			listType.add(new Type(i,name));
 			i++;
 		}
+	}
+	
+	public static void generateListPlayer(int nbPlayer, ArrayList<Player> listPlayer, ArrayList<Type> listType) {
 		
 		// on crée la liste des joueurs, on tire au hasard leur type
 		
@@ -265,6 +266,17 @@ public class Tools {
 			listPlayer.add(new Player(p,listType.get(val)));
 			listType.get(val).addPlayer();
 		}
+	}
+	
+	public static void generatePlayerWithType(int nbPlayer, ArrayList<String> nameOfSkills, ArrayList<Player> listPlayer, ArrayList<Type> listType) {
+		
+		// on crée la liste des Types, une compétence => un type
+		
+		Tools.generateListType(nameOfSkills, listType);
+		
+		// on crée la liste des joueurs, on tire au hasard leur type
+		
+		Tools.generateListPlayer(nbPlayer, listPlayer, listType);
 		
 	}
 
