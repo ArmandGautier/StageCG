@@ -81,8 +81,8 @@ De nouveaux paramètres sont également nécessaires :
 Le paramètre *patronIdeal* nous a servi ici à éviter des jeux dont le coeur n'est jamais vide. Son but est de décrire une _équipe_ _type_. 
 ```
 int[] patronIdeal = new int[3];
-patronIdeal[0] = 2 // Au sein d'une coalition, il ne sert à rien d'avoir plus de deux joueur du type 0
-patronIdeal[1] = 3 // Au sein d'une coalition, il ne sert à rien d'avoir plus de trois joueur du type 1
+patronIdeal[0] = 2 // Au sein d'une coalition, il ne sert à rien d'avoir plus de deux joueurs du type 0
+patronIdeal[1] = 3 // Au sein d'une coalition, il ne sert à rien d'avoir plus de trois joueurs du type 1
 patronIdeal[2] = 1 // Au sein d'une coalition, il ne sert à rien d'avoir plus d'un joueur du type 2
 \\ pour le générer aléatoirement
 int[] patronIdeal = Tools.generatePatronIdeal(listType,nbPlayer); \\ renvoie pour chaque type une valeur entre 1 et nbPlayer
