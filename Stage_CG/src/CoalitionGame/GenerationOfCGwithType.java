@@ -25,12 +25,8 @@ public class GenerationOfCGwithType {
 		ArrayList<Type> listType = new ArrayList<Type>(nameOfSkills.size());
 		Tools.generatePlayerWithType(nbPlayer, nameOfSkills, listPlayer, listType);
 		
-		TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
+		TreeMap<Coalition,Double> nu = Tools.createNu(listPlayer,listType,method,patronIdeal);
 	
-		for (int p=0; p<=nbPlayer; p++) {
-			Tools.createCoalitionOfSize(p,listPlayer,nu,method,listType,patronIdeal);
-		}
-		
 		CoalitionGame game = new CoalitionGame(listPlayer,nu);
 		
 		return game;

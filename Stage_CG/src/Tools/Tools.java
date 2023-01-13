@@ -323,7 +323,10 @@ public class Tools {
 		return listCoalition;
 	}
 
-	
+	/**
+	 * @param listCoalition
+	 * @return permet à l'utilisateur de choisir au clavier le gain des coalitions
+	 */
 	public static TreeMap<Coalition, Double> giveValue(TreeSet<Coalition> listCoalition) {
 		TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
 		Scanner scan = new Scanner(System.in);
@@ -335,6 +338,24 @@ public class Tools {
 		}
 		scan.close();
 		return nu;	
+	}
+
+	/**
+	 * @param listPlayer
+	 * @param listType
+	 * @param method
+	 * @param patronIdeal
+	 * @return la fonction caractéristique d'un jeu de coalition
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 */
+	public static TreeMap<Coalition, Double> createNu(ArrayList<Player> listPlayer, ArrayList<Type> listType, Method method, int[] patronIdeal) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		TreeMap<Coalition, Double> nu = new TreeMap<Coalition, Double>();
+		for (int p=0; p<=listPlayer.size(); p++) {
+			Tools.createCoalitionOfSize(p,listPlayer,nu,method,listType,patronIdeal);
+		}
+		return nu;
 	}
 
 }
