@@ -232,14 +232,14 @@ public class EmptyCore {
 	 * 
 	 */
 	public void print_results() {
-		if (cos==0) {
+		if (cos > 0.000001) {
+			System.out.println("Le coeur est vide, le COS = " + cos);
+		}
+		else {
 			System.out.println("Dans le pay-off solution : ");
 			for (int i=0; i<sol.length; i++) {
 				System.out.println("le joueur "+i+" gagne "+this.sol[i]);
 			}
-		}
-		else {
-			System.out.println("Le coeur est vide, le COS = " + cos);
 		}
 	}
 	
