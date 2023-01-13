@@ -44,11 +44,7 @@ public class GenerationOfCGwithType {
 	 */
 	public static CoalitionGame createCGwithPlayer(ArrayList<Type> listType, ArrayList<Player> listPlayer, Method method, int[] patronIdeal) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
-	
-		for (int p=0; p<=listPlayer.size(); p++) {
-			Tools.createCoalitionOfSize(p,listPlayer,nu,method,listType,patronIdeal);
-		}
+		TreeMap<Coalition,Double> nu = Tools.createNu(listPlayer,listType,method,patronIdeal);
 		
 		CoalitionGame game = new CoalitionGame(listPlayer,nu);
 		
