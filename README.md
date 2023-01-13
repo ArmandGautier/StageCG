@@ -43,27 +43,16 @@ Pour des joueurs qui possèdent un type :
 ```
 ArrayList<Type> listType = ...; // voir ci dessous pour la création de listType
 ArrayList<Player> listPlayer = new ArrayList<Player>();
-Tools.generateListPlayer(nbPlayer, listPlayer, listType); // on génére nbPlayer joueurs qui auront un des types de listType
+Tools.generateListPlayer(nbPlayer, listPlayer, listType); // on génére nbPlayer joueurs qui auront un des types de listType choisit au hasard
 ```
 
 Pour créer la fonction caractéristique nu, deux options :
 
 ### *nu* Option1 
-On peut, sur de petits exemples, rentrer à la main le gain des coalitions. On crée l'ensemble des coalitions puis une boucle sur celles-ci nous permet de leur donner chacune un gain.
+On peut, sur de petits exemples, rentrer à la main le gain des coalitions. On crée l'ensemble des coalitions puis pour chacune d'elle on rentre dans la console le gain qu'on souhaite lui donner.
 ```		
-TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
-TreeSet<Coalition> listCoalition = new TreeSet<Coalition>();
-for (int i=0; i<=nbPlayer; i++) {
-    listCoalition.addAll(Tools.createCoalitionOfSize(i,listPlayer));
-}
-Scanner scan = new Scanner(System.in);
-for (Coalition c : listCoalition) {
-      System.out.println(c.toString());
-      System.out.println("What is the gain for this coalition ? Please enter a number: ");
-      double number = scan.nextInt();
-      nu.put(c,number);
-}
-scan.close();
+TreeSet<Coalition> listCoalition = Tools.createCoalition(listPlayer);
+TreeMap<Coalition,Double> nu = Tools.giveValue(listCoalition);
 ```
 ### *nu* Option2
 On peut aussi créer une *Méthode* qui calculera le gain d'une coalition à sa création.
