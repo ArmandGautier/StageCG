@@ -57,10 +57,7 @@ TreeMap<Coalition,Double> nu = Tools.giveValue(listCoalition);
 ### *nu* Option2
 On peut aussi créer une *Méthode* qui calculera le gain d'une coalition à sa création.
 ```
-TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
-for (int p=0; p<=listPlayer.size(); p++) {
-    Tools.createCoalitionOfSize(p,listPlayer,nu,method,listType,patronIdeal);
-}
+TreeMap<Coalition,Double> nu = Tools.createNu(listPlayer,listType,method,patronIdeal);
 ```
 
 Ici on procède un peu différement, on ajoute, pour chaque taille de coalition possible, directement les coalitions créées à *nu*.
