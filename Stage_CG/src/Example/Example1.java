@@ -1,7 +1,6 @@
 package Example;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -18,7 +17,6 @@ public class Example1 {
 	public static void main(String[] args) {
 		
 		ArrayList<Player> listPlayer = new ArrayList<Player>();
-		TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
 		
 		int nbPlayer = 3;
 		
@@ -26,20 +24,9 @@ public class Example1 {
 			listPlayer.add(new Player(i));
 		}
 		
-		TreeSet<Coalition> listCoalition = new TreeSet<Coalition>();
+		TreeSet<Coalition> listCoalition = Tools.createCoalition(listPlayer);
 		
-		for (int i=0; i<=nbPlayer; i++) {
-			listCoalition.addAll(Tools.createCoalitionOfSize(i,listPlayer));
-		}
-		
-		Scanner scan = new Scanner(System.in);
-		for (Coalition c : listCoalition) {
-			System.out.println(c.toString());
-		    System.out.println("What is the gain for this coalition ? Please enter a number: ");
-		    double number = scan.nextInt();
-			nu.put(c,number);
-		}
-		scan.close();
+		TreeMap<Coalition,Double> nu = Tools.giveValue(listCoalition);
 		
 		CoalitionGame game = new CoalitionGame(listPlayer,nu);
 		

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -308,6 +309,32 @@ public class Tools {
 			res += sol[varOrder.indexOf(o)];
 		}
 		return res;
+	}
+
+	/**
+	 * @param listPlayer
+	 * @return l'ensemble de toutes les coalitions possibles
+	 */
+	public static TreeSet<Coalition> createCoalition(ArrayList<Player> listPlayer) {
+		TreeSet<Coalition> listCoalition = new TreeSet<Coalition>();
+		for (int i=0; i<=listPlayer.size(); i++) {
+			listCoalition.addAll(Tools.createCoalitionOfSize(i,listPlayer));
+		}
+		return listCoalition;
+	}
+
+	
+	public static TreeMap<Coalition, Double> giveValue(TreeSet<Coalition> listCoalition) {
+		TreeMap<Coalition,Double> nu = new TreeMap<Coalition,Double>();
+		Scanner scan = new Scanner(System.in);
+		for (Coalition c : listCoalition) {
+			System.out.println(c.toString());
+		    System.out.println("What is the gain for this coalition ? Please enter a number: ");
+		    double number = scan.nextInt();
+			nu.put(c,number);
+		}
+		scan.close();
+		return nu;	
 	}
 
 }
