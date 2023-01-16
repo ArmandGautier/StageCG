@@ -143,11 +143,6 @@ public class Test8 {
 						addSolved = sCAdd.isSolved();
 						dagSolved = sCDag.isSolved();
 						
-						double[] arcsDroitAdd = sCAdd.getEdgeRight();
-						double[] arcsGaucheAdd = sCAdd.getEdgeLeft();
-						double[] arcsDroitDag = sCDag.getEdgeRight();
-						double[] arcsGaucheDag = sCDag.getEdgeLeft();
-						
 						//System.out.println("ADD "+sCAdd.isSolved());
 						//System.out.println("DAG "+sCDag.isSolved());
 						
@@ -156,13 +151,13 @@ public class Test8 {
 						
 						if (dagSolved) {
 							
-							HashMap<Integer,ArrayList<Player>> listCoalitionDAG = Tools.createSCforDAG(dag,arcsDroitDag,arcsGaucheDag,sol);
+							HashMap<Integer,ArrayList<Player>> listCoalitionDAG = Tools.createSCforDAG(dag,sCDag.getEdgeRight(),sCDag.getEdgeLeft(),sol);
 									
 						}
 							
 						if (addSolved) {
 							
-							HashMap<Integer,ArrayList<Player>> listCoalitionADD = Tools.createSCforADD(add,arcsDroitDag,arcsGaucheDag,sol);
+							HashMap<Integer,ArrayList<Player>> listCoalitionADD = Tools.createSCforADD(add,sCAdd.getEdgeRight(),sCAdd.getEdgeLeft(),sol);
 						}
 						
 						
