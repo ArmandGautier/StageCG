@@ -168,7 +168,7 @@ Finalement une fois notre DAG ou notre CG instancié, on peut lancer la résolut
 
 Pour savoir si le coeur d'un CG est vide : 
 ```
-FindCore lpCg = new FindCore(game); \\ où game est une instance de la classe CoalitionGame
+FindCore lpCg = new FindCore(game); // où game est une instance de la classe CoalitionGame
 lpCg.linearProgramforCG(new StructureOfCoalition(new Coalition(listPlayer)));
 ```
 Le coeur n'est pas vide si :
@@ -185,11 +185,11 @@ lpCg.print_results();
 Pour savoir si le coeur d'un CG représenté par un DAG est vide : 
 ```
 EmptyCore lpDAG = new EmptyCore();
-lpDAG.solve(dag,i); \\ i est le nombre de joueurs jouant dans le jeux
+lpDAG.solve(dag,i); // i est le nombre de joueurs jouant dans le jeux
 ```
 Le coeur est vide si le COS (cost of stability) n'est pas nul, le COS représente ce qu'on devrait rajouter au gain de la grande coalition pour que le coeur ne soit pas vide:
 ```
-lpDAG.getCos() > 0.00001 \\ il arrive que le PL renvoie une valeur extrêmement petite au lieu de 0 c'est pour ça qu'on ne fait pas > 0 directement.
+lpDAG.getCos() > 0.00001 // il arrive que le PL renvoie une valeur extrêmement petite au lieu de 0 c'est pour ça qu'on ne fait pas > 0 directement.
 ```
 Si le coeur n'est pas vide on peut alors afficher un vecteur de pay-off qui appartient au coeur en faisant :
 ```
@@ -205,7 +205,7 @@ sCDag.solve(dag, i, sol); // sol est un vecteur de pay-off coalitionnelement rat
 ```
 Ce programme de PLNE peut être très long à trouver une solution, nous avons donc choisi d'imposer un temps max d'éxécution à CPLEX de 8 minutes. Ce paramètre peut être changé dans le fichier *findStableSC* du package *LinearProgram* au début des fonctions *solve*.
 ```
-cplex.setParam(IloCplex.Param.TimeLimit, time); \\ où time est le temps d'éxécution maximal autorisé
+cplex.setParam(IloCplex.Param.TimeLimit, time); // où time est le temps d'éxécution maximal autorisé
 ```
 
 Une fois le programme terminé, si il existe une solution :
