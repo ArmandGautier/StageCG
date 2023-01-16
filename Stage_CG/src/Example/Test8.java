@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 import ADD.ADD;
 import ADD.GenerationOfADDwithType;
-import ADD.Node;
 import CoalitionGame.Player;
 import CoalitionGame.Type;
 import DAG.DAG;
@@ -26,7 +25,7 @@ public class Test8 {
 	
 	// test pour comparer les algos DAG vs ADD pour savoir si le C-Core est vide.
 
-	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unused", "rawtypes" })
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, CloneNotSupportedException, IOException {
 		
 		int nbPlayer = 20;
@@ -76,11 +75,11 @@ public class Test8 {
 			    int moyNbNodeDag=0;
 			    double moyTimeSCAdd=0;
 			    double moyTimeSCDag=0;
-			    int nbGameSCused = 0;
-			    int nb1 = 0;
-			    int nb2 = 0;
-			    int nb3 = 0;
-			    int nb4 = 0;
+			    int nbGameSCused = 0; // le nombre de game où on va chercher une SC stable
+			    int nb1 = 0; // algo et dag troubent une SC stable dans le temps limite
+			    int nb2 = 0; // sur le dag on trouve une SC stable dans le temps limite, pas assez de temps sur l'add
+			    int nb3 = 0; // sur l'add on trouve une SC stable dans le temps limite, pas assez de temps sur le dag
+			    int nb4 = 0; // on sait qu'il n'y a pas de SC Stable dans les temps où pas assez de temps pour add, dag ou les deux.
 			    
 			    for (int k=0; k<nbGame; k++) {
 			    	
@@ -148,95 +147,22 @@ public class Test8 {
 						double[] arcsGaucheAdd = sCAdd.getEdgeLeft();
 						double[] arcsDroitDag = sCDag.getEdgeRight();
 						double[] arcsGaucheDag = sCDag.getEdgeLeft();
-	
-						// reconstruire chemin into vérifier avec TestCore que c'est ok
-						
-						HashMap<Integer,ArrayList<Player>> listCoalitionADD = new HashMap<Integer,ArrayList<Player>>();
-						HashMap<Integer,ArrayList<Player>> listCoalitionDAG = new HashMap<Integer,ArrayList<Player>>();
-						for (int h=1; h<=nbPlayer; h++) {
-							ArrayList<Player> coalitionADD = new ArrayList<Player>();
-							ArrayList<Player> coalitionDAG = new ArrayList<Player>();
-							listCoalitionADD.put(h, coalitionADD);
-							listCoalitionDAG.put(h, coalitionDAG);
-						}
 						
 						//System.out.println("ADD "+sCAdd.isSolved());
 						//System.out.println("DAG "+sCDag.isSolved());
 						
+						
+						// reconstruire chemin into vérifier avec TestCore que c'est ok
+						
 						if (dagSolved) {
 							
-							Node nodeDAG = dag.getRoot();
-							int chemin = 1;
-							
-							while (chemin <= nbPlayer) {
-								while (! nodeDAG.isLeaf()) {
-									int idNode = nodeDAG.getId();
-									if (arcsDroitDag[idNode]==1) {
-										arcsDroitDag[idNode]--;
-										listCoalitionDAG.get(chemin).add((Player) nodeDAG.getIdVariable());
-										nodeDAG = nodeDAG.getRightChild();
-									}
-									else {
-										if (arcsGaucheDag[idNode]>0) {
-											arcsGaucheDag[idNode]--;
-											nodeDAG = nodeDAG.getLeftChild();
-										}
-										else {
-											break;
-										}
-									}
-								}
-								
-								if (nodeDAG.isLeaf()) {
-									if (Tools.abs(nodeDAG.getValue() - Tools.sum(sol,listCoalitionDAG.get(chemin),dag.getVarOrder())) > 0.0001) {
-										System.out.println(nodeDAG.getValue());
-										System.out.println(Tools.sum(sol,listCoalitionDAG.get(chemin),dag.getVarOrder()));
-										System.out.println("pasOkok : problème valeur feuille");
-										dag.writeDAGinDOT("dag.DOT");
-										add.writeADDinDOT("add.DOT");
-									}
-								}
-								chemin++;
-								nodeDAG = dag.getRoot();
-							}
+							HashMap<Integer,ArrayList<Player>> listCoalitionDAG = Tools.createSCforDAG(dag,arcsDroitDag,arcsGaucheDag,sol);
+									
 						}
 							
 						if (addSolved) {
 							
-							Node node = add.getRoot();
-							int chemin = 1;
-							
-							while (chemin <= nbPlayer) {
-								while (! node.isLeaf()) {
-									int idNode = node.getId();
-									if (arcsDroitAdd[idNode]==1) {
-										arcsDroitAdd[idNode]--;
-										listCoalitionADD.get(chemin).add((Player) node.getIdVariable());
-										node = node.getRightChild();
-									}
-									else {
-										if (arcsGaucheAdd[idNode]>0) {
-											arcsGaucheAdd[idNode]--;
-											node = node.getLeftChild();
-										}
-										else {
-											break;
-										}
-									}
-								}
-								
-								if (node.isLeaf()) {
-									if (Tools.abs(node.getValue() - Tools.sum(sol,listCoalitionADD.get(chemin),dag.getVarOrder())) > 0.0001) {
-										System.out.println(node.getValue());
-										System.out.println(Tools.sum(sol,listCoalitionADD.get(chemin),dag.getVarOrder()));
-										System.out.println("pasOkok : problème valeur feuille");
-										dag.writeDAGinDOT("dag.DOT");
-										add.writeADDinDOT("add.DOT");
-									}
-								}
-								chemin++;
-								node = add.getRoot();
-							}
+							HashMap<Integer,ArrayList<Player>> listCoalitionADD = Tools.createSCforADD(add,arcsDroitDag,arcsGaucheDag,sol);
 						}
 						
 						

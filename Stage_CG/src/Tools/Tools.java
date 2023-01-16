@@ -12,9 +12,12 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import ADD.ADD;
+import ADD.Node;
 import CoalitionGame.Coalition;
 import CoalitionGame.Player;
 import CoalitionGame.Type;
+import DAG.DAG;
 
 public class Tools {
 	
@@ -356,6 +359,95 @@ public class Tools {
 			Tools.createCoalitionOfSize(p,listPlayer,nu,method,listType,patronIdeal);
 		}
 		return nu;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static HashMap<Integer, ArrayList<Player>> createSCforDAG(DAG dag, double[] arcsDroitDag, double[] arcsGaucheDag, double[] sol) {
+		
+		HashMap<Integer,ArrayList<Player>> listCoalition = new HashMap<Integer,ArrayList<Player>>();
+		for (int h=1; h<=dag.getVarOrder().size(); h++) {
+			ArrayList<Player> coalition = new ArrayList<Player>();
+			listCoalition.put(h, coalition);
+		}
+		Node nodeDAG = dag.getRoot();
+		int chemin = 1;
+		
+		while (chemin <= dag.getVarOrder().size()) {
+			while (! nodeDAG.isLeaf()) {
+				int idNode = nodeDAG.getId();
+				if (arcsDroitDag[idNode]==1) {
+					arcsDroitDag[idNode]--;
+					listCoalition.get(chemin).add((Player) nodeDAG.getIdVariable());
+					nodeDAG = nodeDAG.getRightChild();
+				}
+				else {
+					if (arcsGaucheDag[idNode]>0) {
+						arcsGaucheDag[idNode]--;
+						nodeDAG = nodeDAG.getLeftChild();
+					}
+					else {
+						break;
+					}
+				}
+			}
+			
+			if (nodeDAG.isLeaf()) {
+				if (Tools.abs(nodeDAG.getValue() - Tools.sum(sol,listCoalition.get(chemin),dag.getVarOrder())) > 0.0001) {
+					System.out.println(nodeDAG.getValue());
+					System.out.println(Tools.sum(sol,listCoalition.get(chemin),dag.getVarOrder()));
+					System.out.println("pasOkok : problème valeur feuille");
+					dag.writeDAGinDOT("dag.DOT");
+				}
+			}
+			chemin++;
+			nodeDAG = dag.getRoot();
+		}
+		
+		return listCoalition;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static HashMap<Integer, ArrayList<Player>> createSCforADD(ADD add, double[] arcsDroitDag, double[] arcsGaucheDag, double[] sol) {
+		HashMap<Integer,ArrayList<Player>> listCoalition = new HashMap<Integer,ArrayList<Player>>();
+		for (int h=1; h<=add.getVarOrder().size(); h++) {
+			ArrayList<Player> coalition = new ArrayList<Player>();
+			listCoalition.put(h, coalition);
+		}
+		Node nodeDAG = add.getRoot();
+		int chemin = 1;
+		
+		while (chemin <= add.getVarOrder().size()) {
+			while (! nodeDAG.isLeaf()) {
+				int idNode = nodeDAG.getId();
+				if (arcsDroitDag[idNode]==1) {
+					arcsDroitDag[idNode]--;
+					listCoalition.get(chemin).add((Player) nodeDAG.getIdVariable());
+					nodeDAG = nodeDAG.getRightChild();
+				}
+				else {
+					if (arcsGaucheDag[idNode]>0) {
+						arcsGaucheDag[idNode]--;
+						nodeDAG = nodeDAG.getLeftChild();
+					}
+					else {
+						break;
+					}
+				}
+			}
+			
+			if (nodeDAG.isLeaf()) {
+				if (Tools.abs(nodeDAG.getValue() - Tools.sum(sol,listCoalition.get(chemin),add.getVarOrder())) > 0.0001) {
+					System.out.println(nodeDAG.getValue());
+					System.out.println(Tools.sum(sol,listCoalition.get(chemin),add.getVarOrder()));
+					System.out.println("pasOkok : problème valeur feuille");
+					add.writeADDinDOT("dag.DOT");
+				}
+			}
+			chemin++;
+			nodeDAG = add.getRoot();
+		}
+		
+		return listCoalition;
 	}
 
 }

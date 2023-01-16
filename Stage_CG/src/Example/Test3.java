@@ -74,28 +74,28 @@ public class Test3 {
 			    
 			    bw2.write(content);
 			    
-			    double t1Nu = 0;
-			    double t1AddO = 0;
-			    double t1AddOo = 0;
-			    double t1AddNo = 0;
-			    double t2Nu = 0;
-			    double t2AddO = 0;
-			    double t2AddOo = 0;
-			    double t2AddNo = 0;
-			    double t3Nu = 0;
-			    double t3AddO = 0;
-			    double t3AddOo = 0;
-			    double t3AddNo = 0;
-			    double t4Nu = 0;
-			    double t4AddO = 0;
-			    double t4AddOo = 0;
-			    double t4AddNo = 0;
-			    int n1AddO = 0;
-			    int n1AddOo = 0;
-			    int n1AddNo = 0;
-			    int n2AddO = 0;
-			    int n2AddOo = 0;
-			    int n2AddNo = 0;  
+			    double t1Nu = 0; // tps de construction de la fonction caractéristique
+			    double t1AddO = 0; // tps de construction add + dag
+			    double t1AddOo = 0; // tps de construction add + dag
+			    double t1AddNo = 0; // tps de construction add + dag
+			    double t2Nu = 0; // tps totale du PL
+			    double t2AddO = 0; // tps totale du PL
+			    double t2AddOo = 0; // tps totale du PL
+			    double t2AddNo = 0; // tps totale du PL
+			    double t3Nu = 0; // tps de construction du PL
+			    double t3AddO = 0; // tps de construction du PL
+			    double t3AddOo = 0; // tps de construction du PL
+			    double t3AddNo = 0; // tps de construction du PL
+			    double t4Nu = 0; // tps de résolution du PL
+			    double t4AddO = 0; // tps de résolution du PL
+			    double t4AddOo = 0; // tps de résolution du PL
+			    double t4AddNo = 0; // tps de résolution du PL
+			    int n1AddO = 0; // nb noeud de l'add
+			    int n1AddOo = 0; // nb noeud de l'add
+			    int n1AddNo = 0; // nb noeud de l'add
+			    int n2AddO = 0; // nb noeud du dag
+			    int n2AddOo = 0; // nb noeud du dag
+			    int n2AddNo = 0;  // nb noeud du dag
 			    int nbEmptyCore = 0;
 			    
 			    for (int k=0; k<nbGame; k++) {
