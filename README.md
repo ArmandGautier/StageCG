@@ -213,5 +213,10 @@ Une fois le programme terminé, si il existe une solution :
 if (sCAdd.isSolved());
 ```
 On peut reconstruire les coalitions formant notre structure de coalition grâce aux variables *Eud* et *Eug*.
-Vous trouverez un exemple dans le fichier *Test8* du package *Example*
+```
+HashMap<Integer,ArrayList<Player>> listCoalitionADD = Tools.createSCforADD(add,sCAdd.getEdgeRight(),sCAdd.getEdgeLeft(),sol);
+HashMap<Integer,ArrayList<Player>> listCoalitionDAG = Tools.createSCforDAG(dag,sCDag.getEdgeRight(),sCDag.getEdgeLeft(),sol);
+```
+
+ATTENTION : pour le DAG, tous les joueurs seront dans une coalition, mais pour l'ADD il est possible que certain joueurs ne soient dans aucune coalition, cela signifie qu'on peut les mettres dans n'importe laquelle avec un gain de 0.
 
